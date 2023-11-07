@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+
+    <link rel="stylesheet" href="./trang_chu.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;600&display=swap"
+    />
+  </head>
+  <body>
+    <div class="trang_chu">
+      <div class="footer">
+        <div class="date" id = "txtDate">August 21, 2023</div>
+      </div>
+      <div class="frame">
+        <div class="frame1">
+          <div class="page_heading">
+            <div class="quan_ly_can_tin_txt">Quản lý căn tin</div>
+            <div class="divider"></div>
+          </div>
+          <div class="header">
+            <div class="hcmuss_cafeteria">HCMUS’s Cafeteria</div>
+            <div class="btn_menu" id="btnMenu">
+              <div class="menu_txt">Menu</div>
+            </div>
+            <div class="btn_bao_cao" id="btnBaoCao">
+                <div class="bao_cao_txt">Báo cáo</div>
+            </div>
+            <div class="btn_kho_hang" id="btnKhoHang">
+              <div class="kho_hang_txt">Kho hàng</div>
+            </div>
+            <div class="btn_ban_hang" id="btnBanHang">
+              <div class="ban_hang_txt">Bán hàng</div>
+            </div>
+          </div>
+        </div>
+        <div class="frame2">
+          <div class="frame3">
+            <div class="bao_cao_doanh_thu_container" id="containerBaoCaoDoanhThu">
+              <div class="bao_cao_doanh_thu_txt">Báo cáo doanh thu</div>
+            </div>
+            <summary class="quan_ly_kho_hang_container" id="containerQuanLyKhoHang">
+              <div class="quan_ly_kho_hang_txt">Quản lý kho hàng</div>
+            </summary>
+          </div>
+        </div>
+        <div class="frame4">
+          <div class="frame3">
+            <div class="quan_ly_thuc_don_container" id="containerQuanLyThucDon">
+              <div class="quan_ly_thuc_don_txt">Quản lý thực đơn</div>
+            </div>
+            <div class="ban_hang_container" id="containerBanHang">
+              <div class="frame6">
+                <div class="quan_ly_ban_hang_txt">Bán hàng</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      var btnMenu = document.getElementById("btnMenu");
+      if (btnMenu) {
+        btnMenu.addEventListener("click", function (e) {
+          // Please sync "trang_quan_ly_menu" to the project
+          window.location.assign("trang_quan_ly_menu.html");
+        });
+      }
+      
+      var btnBaoCao = document.getElementById("btnBaoCao");
+      if (btnBaoCao) {
+        btnBaoCao.addEventListener("click", function (e) {
+          window.location.assign("trang_bao_cao_doanh_thu.html");
+        });
+      }
+      
+      var btnKhoHang = document.getElementById("btnKhoHang");
+      if (btnKhoHang) {
+        btnKhoHang.addEventListener("click", function (e) {
+          // Please sync "trang_quan_ly_kho_hang" to the project
+          window.location.assign("trang_quan_ly_kho_hang.html");
+        });
+      }
+      
+      var btnBanHang = document.getElementById("btnBanHang");
+      if (btnBanHang) {
+        btnBanHang.addEventListener("click", function (e) {
+          // Please sync "trang_ban_hang" to the project
+          window.location.assign("trang_ban_hang.html");
+        });
+      }
+      
+      var containerBaoCaoDoanhThu = document.getElementById("containerBaoCaoDoanhThu");
+      if (containerBaoCaoDoanhThu) {
+        containerBaoCaoDoanhThu.addEventListener("click", function (e) {
+          // Please sync "trang_bao_cao_doanh_thu" to the project
+          window.location.assign("trang_bao_cao_doanh_thu.html");
+        });
+      }
+      
+      var containerQuanLyKhoHang = document.getElementById("containerQuanLyKhoHang");
+      if (containerQuanLyKhoHang) {
+        containerQuanLyKhoHang.addEventListener("click", function (e) {
+          // Please sync "trang_quan_ly_kho_hang" to the project
+          window.location.assign("trang_quan_ly_kho_hang.html");
+        });
+      }
+      
+      var containerQuanLyThucDon = document.getElementById("containerQuanLyThucDon");
+      if (containerQuanLyThucDon) {
+        containerQuanLyThucDon.addEventListener("click", function (e) {
+          // Please sync "trang_quan_ly_menu" to the project
+          window.location.assign("trang_quan_ly_menu.html");
+        });
+      }
+      
+      var containerBanHang = document.getElementById("containerBanHang");
+      if (containerBanHang) {
+        containerBanHang.addEventListener("click", function (e) {
+          // Please sync "trang_ban_hang" to the project
+          window.location.assign("trang_ban_hang.html");
+        });
+      }
+      </script>
+  </body>
+</html>
