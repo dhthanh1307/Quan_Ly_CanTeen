@@ -29,11 +29,11 @@ export default {
     },
     template:
         `<div class="container">
-           
+
             <div class="row">
                 <vcnav/>
             </div>
-            <div class="row">                             
+            <div class="row w-100">                             
                 <component :is="comName"/>                                   
             </div>
             <div class="row">

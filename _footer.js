@@ -6,10 +6,8 @@ export default{
     },
     template:
     `
-    <nav class="navbar bg-body-tertiary">
-        <div class="container-fluid">
-            <span class="navbar-brand" >August 21, 2023</span>
-        </div>
+    <nav class="navbar bg-body-tertiary  ">
+            <span class="navbar-brand text-end  w-100 fw-bold" >August 21, 2023</span>
     </nav>
     `
 }
