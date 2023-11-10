@@ -1,0 +1,15 @@
+.goods-display {
+    width: 40rem;
+    height: 46rem;
+}
+
+.import-detail, .export-detail {
+    width: 30rem;
+    height: fit-content;
+    padding: 12px;
+}
+
+.goods-item {
+    width: 15rem;
+    height: 8rem;
+}

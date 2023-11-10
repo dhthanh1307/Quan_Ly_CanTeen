@@ -2,18 +2,17 @@ import { computed } from 'vue'
 import vcnav from './_nav.js'
 import vccontent from './_content.js'
 import vcfooter from './_footer.js'
+import vcreport from './_report.js'
+import vcmenu from './_menu.js'
+import vcimport from './_import.js'
 export default {
     data() {
-        return {
-       
-            comName: 'vccontent',
-        
-
+        return {  
+            comName: 'vccontent'
         }
     },
     components: {
-         vcnav,  vccontent, vcfooter
-         
+        vcnav, vccontent, vcfooter, vcreport, vcmenu, vcimport
     },
     provide() {
         return {
@@ -21,8 +20,9 @@ export default {
         }
     },
     methods: {
-       
-
+        changePage(page) {
+            this.comName = page;
+        }
     },
     beforeMount(){
      
@@ -31,10 +31,10 @@ export default {
         `<div class="container">
 
             <div class="row">
-                <vcnav/>
+                <vcnav @change-page="changePage"/>
             </div>
             <div class="row w-100">                             
-                <component :is="comName"/>                                   
+                <component @change-page="changePage" :is="comName"/>                                   
             </div>
             <div class="row">
                 <vcfooter/>
