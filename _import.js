@@ -10,7 +10,7 @@ export default{
     template:
     `<div class="container w-100">
         <nav class="navbar w-100">
-            <span class="navbar-brand fs-1 fw-bold" >Quản lý kho hàng</span>
+            <span class="navbar-brand fs-1 fw-bold">Quản lý kho hàng</span>
         </nav>
         <div class="row d-flex flex-row col-12 ms-4">
             <div class="d-flex flex-column col-7">

@@ -8,7 +8,7 @@ export default{
     `
     <nav class="navbar bg-body-tertiary">
         <div class="container-fluid">
-            <span @click="$emit('changePage', 'vccontent')" class="navbar-brand user-select-none" style="font-family:'Newsreader', serif;">
+            <span @click="$emit('changePage', 'vccontent')" class="navbar-brand user-select-none fw-bold" style="font-family:'Newsreader', serif;font-size:30px;color:#426b1f">
                 HCMUS’s Cafeteria
             </span>
             <form class="d-flex" role="search">
