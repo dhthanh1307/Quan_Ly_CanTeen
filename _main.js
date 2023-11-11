@@ -5,6 +5,7 @@ import vcfooter from './_footer.js'
 import vcreport from './_report.js'
 import vcmenu from './_menu.js'
 import vcimport from './_import.js'
+import vcsell from './_sell.js' 
 export default {
     data() {
         return {  
@@ -12,7 +13,7 @@ export default {
         }
     },
     components: {
-        vcnav, vccontent, vcfooter, vcreport, vcmenu, vcimport
+        vcnav, vccontent, vcfooter, vcreport, vcmenu, vcimport,vcsell
     },
     provide() {
         return {
@@ -30,7 +31,7 @@ export default {
     template:
         `<div class="container">
 
-            <div class="row">
+            <div class="row mt-4">
                 <vcnav @change-page="changePage"/>
             </div>
             <div class="row w-100">                             
