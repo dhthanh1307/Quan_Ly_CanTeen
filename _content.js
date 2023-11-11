@@ -10,29 +10,35 @@ export default{
                 <span class="navbar-brand fs-1 fw-bold" >Quản lý căn tin</span>
         </nav>
         <div class="row d-flex w-100 mb-5  " >
-            <div class="card text-bg-success m-4 mx-auto" style="max-width: 25rem;height:13rem">
+            <div class="card text-bg-success mt-4 mx-auto" @click="$emit('changePage', 'vcsell')" style="max-width: 18rem;">
+            <img src="../images/content2.jpg" class="card-img-top mt-2" alt="..."> 
                 <div class="card-body ">
-                    <h1 class="card-title text-center mt-5 user-select-none" @click="$emit('changePage', 'vcsell')">Bán hàng</h1>
+                    <h3 class="card-title text-center mt-2 user-select-none" >Bán hàng</h3>
                 </div>
             </div>
-            <div @click="$emit('changePage', 'vcmenu')" class="card text-bg-success m-4  mx-auto " style="max-width: 25rem;height:13rem">
+            <div @click="$emit('changePage', 'vcmenu')" class="card text-bg-success mt-4  mx-auto " style="max-width: 18rem;">
+                <img src="../images/content1.jpg" class="card-img-top mt-2" alt="..."> 
+                
                 <div class="card-body">
-                    <h1 class="card-title text-center mt-5 user-select-none" @click="$emit('changePage', 'vcmenu')">Quản lý thực đơn</h1>
+                    <h3 class="card-title text-center mt-2 user-select-none" @click="$emit('changePage', 'vcmenu')">Quản lý thực đơn</h3>
+                </div>
+            </div>
+            <div @click="$emit('changePage', 'vcreport')" class="card text-bg-success mt-4  mx-auto " style="max-width: 18rem;">
+                <img src="../images/content4.jpg" class="card-img-top mt-2" alt="..."> 
+
+                <div class="card-body">
+
+                    <h3 class="card-title text-center mt-2 user-select-none" @click="$emit('changePage', 'vcreport')">Báo cáo doanh thu</h3>
+                </div>
+            </div>
+            <div @click="$emit('changePage', 'vcimport')" class="card text-bg-success mt-4  mx-auto " style="max-width: 18rem;">
+                <img src="../images/content3.jpg" class="card-img-top mt-2" alt="..."> 
+                <div class="card-body">
+                    <h3 class="card-title text-center mt-2 user-select-none" @click="$emit('changePage', 'vcimport')">Quản lí kho hàng</h3>
                 </div>
             </div>
         </div>
-        <div class="row d-flex w-100 mt-5"  >
-            <div @click="$emit('changePage', 'vcreport')" class="card text-bg-success m-4  mx-auto " style="max-width: 25rem;height:13rem;">
-                <div class="card-body">
-                    <h1 class="card-title text-center mt-5 user-select-none" @click="$emit('changePage', 'vcreport')">Báo cáo doanh thu</h1>
-                </div>
-            </div>
-            <div @click="$emit('changePage', 'vcimport')" class="card text-bg-success m-4  mx-auto " style="max-width: 25rem;height:13rem">
-                <div class="card-body">
-                    <h1 class="card-title text-center mt-5 user-select-none" @click="$emit('changePage', 'vcimport')">Quản lí kho hàng</h1>
-                </div>
-            </div>
-        </div>
+        
    
     </div>`
 }
