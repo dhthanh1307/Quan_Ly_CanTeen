@@ -1,3 +1,65 @@
+class DisplayMonAn {
+    constructor(MonAn) {
+        this.MaMonAn = MonAn.MaMonAn;
+        this.TenMonAn = MonAn.TenMonAn;
+        this.GiaBan = MonAn.GiaBan;
+        this.HanSuDung = MonAn.HanSuDung;
+    }
+};
+
+async function fetchGet(url) {
+    const response = await fetch(url, {
+        cache: "no-store",
+        method: 'GET',
+    });
+    if (response.status >= 200 && response.status < 300) {
+        const json = await response.json();
+        return json;
+    } else {
+        if (response.status === 500) {
+            window.location = '/';
+        }
+    }
+}
+
+async function fetchPost(url, obj) {
+    const response = await fetch(url, {
+        cache: "no-store",
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(obj),
+    });
+    if (response.status >= 200 && response.status < 300) {
+        const text = await response.text();
+        return text;
+    } else {
+        // if (response.status === 500) {
+        //     window.location = '/';
+        // }
+    }
+}
+
+async function fetchGetAllMonAn() {
+    const url = "http://localhost:3000/getAllMonAn";
+    const json = await fetchGet(url);
+    //console.log(json);
+    //const jsonArray = json.data ?? [];
+    return {
+        displayArray: json.map((MonAn) => {
+            return MonAn;
+        })
+    };
+}
+
+async function fetchUpdateMonAn(ID, Name, Price) {
+    const url = `http://localhost:3000/updateMonAn`;
+    const json = await fetchPost(url, { MaMonAn: ID, TenMonAn: Name, GiaBan: Price });
+    return json;
+}
+
 import { computed } from 'vue'
 import vcnav from './_nav.js'
 import vccontent from './_content.js'
@@ -9,7 +71,9 @@ import vcsell from './_sell.js'
 export default {
     data() {
         return {  
-            comName: 'vccontent'
+            comName: 'vccontent',
+            loading: false,
+            ListMonAn: []
         }
     },
     components: {
@@ -17,12 +81,36 @@ export default {
     },
     provide() {
         return {
-            
+            ListMonAn: computed(() => this.ListMonAn)
         }
     },
     methods: {
         changePage(page) {
             this.comName = page;
+        },
+        async reloadMonAn() {
+            const res = await fetchGetAllMonAn();
+            this.ListMonAn = res.displayArray;
+            this.loading = false;
+            //console.log(this.ListMonAn);
+        },
+        async changeToMenu() {
+            this.comName = 'vcmenu';
+            this.loading = true;
+            try {
+                this.reloadMonAn();
+            }
+            catch (error) {
+                console.log(error);
+            }
+        },
+        async updateItem(ID, Name, Price) {
+            try {
+                const res = await fetchUpdateMonAn(ID, Name, Price);
+                this.reloadMonAn();
+            } catch (error) {
+                console.log(error);
+            }
         }
     },
     beforeMount(){
@@ -32,7 +120,7 @@ export default {
         `<div class="container">
 
             <div class="row mt-4">
-                <vcnav @change-page="changePage"/>
+                <vcnav @change-page="changePage" @change-menu="changeToMenu"/>
             </div>
 
 
@@ -79,7 +167,7 @@ export default {
             </div>
             
             <div class="row w-100">                             
-                <component @change-page="changePage" :is="comName"/>                                   
+                <component v-if="!loading" @change-page="changePage" @update-item="updateItem" :is="comName"/>                                   
             </div>
 
             <div class="row">
