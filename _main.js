@@ -7,6 +7,15 @@ class DisplayMonAn {
     }
 };
 
+class DisplayThucPham {
+    constructor(ThucPham) {
+        this.MaThucPham = ThucPham.MaThucPham;
+        this.TenThucPham = ThucPham.TenThucPham;
+        this.DonViTinh = ThucPham.DonViTinh;
+        this.SoLuongTrongKho = ThucPham.SoLuongTrongKho;
+    }
+};
+
 async function fetchGet(url) {
     const response = await fetch(url, {
         cache: "no-store",
@@ -36,9 +45,9 @@ async function fetchPost(url, obj) {
         const text = await response.text();
         return text;
     } else {
-        // if (response.status === 500) {
-        //     window.location = '/';
-        // }
+        if (response.status === 500) {
+            window.location = '/';
+        }
     }
 }
 
@@ -54,15 +63,47 @@ async function fetchGetAllMonAn() {
     };
 }
 
+async function fetchLogin(username, password, isAdmin) {
+    const url = `http://localhost:3000/login`;
+    const json = await fetchPost(url, { username: username, password: password, isAdmin: isAdmin });
+    return json;
+}
+
 async function fetchUpdateMonAn(ID, Name, Price) {
     const url = `http://localhost:3000/updateMonAn`;
     const json = await fetchPost(url, { MaMonAn: ID, TenMonAn: Name, GiaBan: Price });
     return json;
 }
 
+async function fetchGetAllThucPham() {
+    const url = "http://localhost:3000/getAllThucPham";
+    const json = await fetchGet(url);
+    //console.log(json);
+    //const jsonArray = json.data ?? [];
+    return {
+        displayArrayThucPham: json.map((ThucPham) => {
+            return ThucPham;
+        })
+    };
+}
+
+async function fetchInsertThucPham(MaThucPham, SoLuongNhap, NgayNhap, GiaNhap) {
+    const url = `http://localhost:3000/insertThucPham`;
+    const json = await fetchPost(url, { MaThucPham: MaThucPham, SoLuongNhap: SoLuongNhap, NgayNhap: NgayNhap, GiaNhap:GiaNhap });
+    return json;
+}
+
+async function fetchRemoveThucPham(MaThucPham, SoLuong) {
+    const url = `http://localhost:3000/removeThucPham`;
+    const json = await fetchPost(url, { MaThucPham: MaThucPham, SoLuong: SoLuong });
+    return json;
+}
+
 import { computed } from 'vue'
+import vclogin from './_login.js'
 import vcnav from './_nav.js'
 import vccontent from './_content.js'
+import vcinfo from './_info.js'
 import vcfooter from './_footer.js'
 import vcreport from './_report.js'
 import vcmenu from './_menu.js'
@@ -70,21 +111,45 @@ import vcimport from './_import.js'
 import vcsell from './_sell.js' 
 export default {
     data() {
-        return {  
+        return {
+            login: false,
+            isAdmin: false,
             comName: 'vccontent',
             loading: false,
-            ListMonAn: []
+            ListMonAn: [],
+            ListThucPham: []
         }
     },
     components: {
-        vcnav, vccontent, vcfooter, vcreport, vcmenu, vcimport,vcsell
+        vclogin, vcnav, vccontent, vcinfo, vcfooter, vcreport, vcmenu, vcimport, vcsell
     },
     provide() {
         return {
-            ListMonAn: computed(() => this.ListMonAn)
+            ListMonAn: computed(() => this.ListMonAn),
+            ListThucPham: computed(() => this.ListThucPham)
         }
     },
     methods: {
+        async doLogin(username, password, isAdmin) {
+            const res = await fetchLogin(username, password, isAdmin);
+            if (res == 'true') {
+                this.login = true;
+                this.isAdmin = isAdmin;
+            }
+            else {
+                this.showToast();
+            }
+        },
+        showToast() {
+            var toastEl = document.getElementById('liveToast');
+            var toast = new bootstrap.Toast(toastEl);
+            toast.show();
+        },
+        currentDate() {
+            const current = new Date();
+            const date = `${current.getFullYear()}-${current.getMonth()+1}-${current.getDate()}`;
+            return date;
+        },
         changePage(page) {
             this.comName = page;
         },
@@ -111,68 +176,75 @@ export default {
             } catch (error) {
                 console.log(error);
             }
+        },
+        async reloadThucPham() {
+            const res = await fetchGetAllThucPham();
+            this.ListThucPham = res.displayArrayThucPham;
+            this.loading = false;
+            //console.log(this.ListThucPham);
+        },
+        async changeToImport() {
+            this.comName = 'vcimport';
+            this.loading = true;
+            try {
+                this.reloadThucPham();
+            }
+            catch (error) {
+                console.log(error);
+            }
+        },
+        async insertThucPham(MaThucPham, SoLuongNhap, GiaNhap) {
+            try {
+                let NgayNhap = this.currentDate();
+                const res = await fetchInsertThucPham(MaThucPham, SoLuongNhap, NgayNhap, GiaNhap);
+                this.reloadThucPham();
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        async removeThucPham(MaThucPham, SoLuong) {
+            try {
+                const res = await fetchRemoveThucPham(MaThucPham, SoLuong);
+                this.reloadThucPham();
+            } catch (error) {
+                console.log(error);
+            }
         }
     },
     beforeMount(){
      
     },
     template:
-        `<div class="container">
+        `<div class="container" v-if="login">
 
             <div class="row mt-4">
-                <vcnav @change-page="changePage" @change-menu="changeToMenu"/>
+                <vcnav @change-page="changePage" @change-menu="changeToMenu" @change-import="changeToImport"/>
             </div>
 
-
-            <div class="row w-100" style="height:500px" v-if="comName=='vccontent'">
-                <div id="carouselExample" class="carousel slide h-100" >
-                    <div class="carousel-inner h-100">
-                        <div class="carousel-item active">
-                            <img src="../images/image1.jpg" class="d-block " alt="..." style="object-fit: contain;">
-                        </div>
-                        <div class="carousel-item">
-                            <img src="../images/image2.jpg" class="d-block w-100 h-100" alt="..." style="object-fit: contain;">
-                        </div>
-                        <div class="carousel-item">
-                            <img src="../images/image3.jpg" class="d-block w-100 h-100" alt="..." style="object-fit: contain;">
-                        </div>
-                        <div class="carousel-item">
-                            <img src="../images/image4.png" class="d-block w-100 h-100" alt="..." style="object-fit: contain;">
-                        </div>
-                    </div>
-                   
-
-                  
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
-            </div>
-            
-            <div class="bg-success w-100 row "  style="height:250px"  v-if="comName=='vccontent'">
-                <h1 class="text-white mt-5 ms-3">Giới thiệu</h1>
-                <p class="text-white mb-5  ms-3  text-wrap me-3 w-75" >Chào mừng bạn đến với trang web quản lý canteen của chúng tôi! Đây là nơi bạn có thể dễ dàng đặt hàng, theo dõi đơn hàng và trải nghiệm dịch vụ tuyệt vời của chúng tôi.
-                Trang web quản lý canteen của chúng tôi là một nền tảng trực tuyến tiện lợi, dễ sử dụng, giúp cải thiện và tối ưu hóa quy trình quản lý căng tin. Hãy khám phá và tận hưởng những món ăn ngon miệng mà chúng tôi phục vụ. Rất vui được phục vụ bạn!</p>
-
-            </div>
-            <div v-if="comName=='vccontent'" class="row d-flex w-100"
-                 style=" background-attachment: fixed;background-image: url('../images/background.jpg');height:500px;background-size:cover">
-                <div class="text-white text-center  col-12" style="font-family:'Newsreader', serif; font-size:30px;height:40px;margin-top:100px">Chào mừng các bạn đến với</div>
-                <div class="text-white text-center " style="font-family:'Newsreader', serif;font-size:100px;margin-bottom:200px">Website quản lý canteen</div>
-            </div>
+            <vcinfo v-if="comName=='vccontent'"/>
             
             <div class="row w-100">                             
-                <component v-if="!loading" @change-page="changePage" @update-item="updateItem" :is="comName"/>                                   
+                <component v-if="!loading" @change-page="changePage" @change-menu="changeToMenu" @change-import="changeToImport" @update-item="updateItem" @insert-thuc-pham="insertThucPham" @remove-thuc-pham="removeThucPham" :is="comName"/>
+                <component v-else :is="comName"/>                                   
+            
             </div>
 
             <div class="row">
                 <vcfooter/>
             </div>
-        </div>`
+        </div>
+        <vclogin @login="doLogin" v-if="!login"/>
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong class="me-auto">Lỗi</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    Tài khoản hoặc mật khẩu không đúng!
+                </div>
+            </div>
+        </div>
+        `
 };
 

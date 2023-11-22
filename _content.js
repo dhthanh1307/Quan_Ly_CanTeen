@@ -16,11 +16,11 @@ export default{
                     <h3 class="card-title text-center mt-2 user-select-none" >Bán hàng</h3>
                 </div>
             </div>
-            <div @click="$emit('changePage', 'vcmenu')" class="card text-bg-success mt-4  mx-auto " style="max-width: 18rem;">
+            <div @click="$emit('changeMenu')" class="card text-bg-success mt-4  mx-auto " style="max-width: 18rem;">
                 <img src="../images/content1.jpg" class="card-img-top mt-2" alt="..."> 
                 
                 <div class="card-body">
-                    <h3 class="card-title text-center mt-2 user-select-none" @click="$emit('changePage', 'vcmenu')">Quản lý thực đơn</h3>
+                    <h3 class="card-title text-center mt-2 user-select-none" @click="$emit('changeMenu')">Quản lý thực đơn</h3>
                 </div>
             </div>
             <div @click="$emit('changePage', 'vcreport')" class="card text-bg-success mt-4  mx-auto " style="max-width: 18rem;">
@@ -31,10 +31,10 @@ export default{
                     <h3 class="card-title text-center mt-2 user-select-none" @click="$emit('changePage', 'vcreport')">Báo cáo doanh thu</h3>
                 </div>
             </div>
-            <div @click="$emit('changePage', 'vcimport')" class="card text-bg-success mt-4  mx-auto " style="max-width: 18rem;">
+            <div @click="$emit('changeImport')" class="card text-bg-success mt-4  mx-auto " style="max-width: 18rem;">
                 <img src="../images/content3.jpg" class="card-img-top mt-2" alt="..."> 
                 <div class="card-body">
-                    <h3 class="card-title text-center mt-2 user-select-none" @click="$emit('changePage', 'vcimport')">Quản lí kho hàng</h3>
+                    <h3 class="card-title text-center mt-2 user-select-none" @click="$emit('changeImport')">Quản lí kho hàng</h3>
                 </div>
             </div>
         </div>

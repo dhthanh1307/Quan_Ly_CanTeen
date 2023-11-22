@@ -7,4 +7,13 @@ class MonAn {
     }
 };
 
-module.exports = { MonAn };
+class ThucPham {
+    constructor(rawThucPham) {
+        this.MaThucPham = rawThucPham.MaThucPham;
+        this.TenThucPham = rawThucPham.TenThucPham;
+        this.DonViTinh = rawThucPham.DonViTinh;
+        this.SoLuongTrongKho = rawThucPham.SoLuongTrongKho;
+    }
+};
+
+module.exports = { MonAn, ThucPham };
