@@ -26,5 +26,18 @@ module.exports = {
         } catch (err) {
             next(err);
         }
+    },
+    thanhtoan: async (req, res, next) => {
+        try {
+            const body = req.body;
+            const mabanhang = await db.insertHoaDon(body.PhuongThuc, body.SoTien);
+            for (let i = 0; i < body.ListEdit.length; i++)
+                if (body.ListEdit[i].SoLuong > 0)
+                    await db.insertBanHang(mabanhang, body.ListEdit[i]);
+            res.sendStatus(200);
+
+        } catch (e) {
+            next(e);
+        }
     }
 }

@@ -30,6 +30,17 @@ module.exports = {
         const query = `UPDATE "MonAn" SET "TenMonAn" = '${TenMonAn}', "GiaBan" = '${GiaBan}' WHERE "MaMonAn" = '${MaMonAn}'`;
         await db.query(query);
     },
+    insertHoaDon: async (PhuongThuc,SoTien)=>{
+        const query=`INSERT INTO "HoaDon"("PhuongThuc","SoTien") VALUES ( '${PhuongThuc}', '${SoTien}') RETURNING "MaBanHang"`;
+        const result =await db.query(query);
+        return result[0].MaBanHang;
+    },
+    insertBanHang: async (MaBanHang,MonAn)=>{
+        console.log(MonAn);
+        const currentDate = new Date();
+        const query=`INSERT INTO "BanHang" VALUES ('${MaBanHang}','${MonAn.MaMonAn}','${MonAn.SoLuong}','${currentDate.toISOString()}')`;
+        await db.query(query);
+    },
     find: async (tbName, ID) => {
         const query = `SELECT * FROM "${tbName}" WHERE id = ${ID}`;
         const data = await db.query(query);

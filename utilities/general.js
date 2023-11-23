@@ -4,6 +4,7 @@ class MonAn {
         this.TenMonAn = rawMonAn.TenMonAn;
         this.GiaBan = rawMonAn.GiaBan;
         this.HanSuDung = rawMonAn.HanSuDung;
+        this.SoLuong=rawMonAn.SoLuong;
     }
 };
 

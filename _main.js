@@ -1,9 +1,13 @@
+//NOTES: 
+//thêm cột số lượng trong món ăn
+//mã bán hàng tự động tăng
 class DisplayMonAn {
     constructor(MonAn) {
         this.MaMonAn = MonAn.MaMonAn;
         this.TenMonAn = MonAn.TenMonAn;
         this.GiaBan = MonAn.GiaBan;
         this.HanSuDung = MonAn.HanSuDung;
+        this.SoLuong=MonAn.SoLuong;
     }
 };
 
@@ -60,6 +64,8 @@ async function fetchUpdateMonAn(ID, Name, Price) {
     return json;
 }
 
+
+
 import { computed } from 'vue'
 import vcnav from './_nav.js'
 import vccontent from './_content.js'
@@ -67,17 +73,17 @@ import vcfooter from './_footer.js'
 import vcreport from './_report.js'
 import vcmenu from './_menu.js'
 import vcimport from './_import.js'
-import vcsell from './_sell.js' 
+import vcsell from './_sell.js'
 export default {
     data() {
-        return {  
+        return {
             comName: 'vccontent',
             loading: false,
             ListMonAn: []
         }
     },
     components: {
-        vcnav, vccontent, vcfooter, vcreport, vcmenu, vcimport,vcsell
+        vcnav, vccontent, vcfooter, vcreport, vcmenu, vcimport, vcsell
     },
     provide() {
         return {
@@ -87,12 +93,22 @@ export default {
     methods: {
         changePage(page) {
             this.comName = page;
+            if (this.comName == 'vcsell') {
+                this.loading = true;
+                try {
+                    this.reloadMonAn();
+                }
+                catch (error) {
+                    console.log(error);
+                }   
+            }
         },
         async reloadMonAn() {
             const res = await fetchGetAllMonAn();
             this.ListMonAn = res.displayArray;
             this.loading = false;
             //console.log(this.ListMonAn);
+
         },
         async changeToMenu() {
             this.comName = 'vcmenu';
@@ -104,6 +120,11 @@ export default {
                 console.log(error);
             }
         },
+        async thanhtoan(result,ListEdit){
+            const url = `http://localhost:3000/insertHoaDon`;
+            const json = await fetchPost(url, {PhuongThuc:`online`,SoTien:result,ListEdit:ListEdit});
+            return json;
+        },
         async updateItem(ID, Name, Price) {
             try {
                 const res = await fetchUpdateMonAn(ID, Name, Price);
@@ -113,8 +134,8 @@ export default {
             }
         }
     },
-    beforeMount(){
-     
+    beforeMount() {
+
     },
     template:
         `<div class="container">
@@ -167,7 +188,7 @@ export default {
             </div>
             
             <div class="row w-100">                             
-                <component v-if="!loading" @change-page="changePage" @update-item="updateItem" :is="comName"/>                                   
+                <component v-if="!loading" @change-page="changePage" @update-item="updateItem" @thanh-toan="thanhtoan" :is="comName"/>                                   
             </div>
 
             <div class="row">
