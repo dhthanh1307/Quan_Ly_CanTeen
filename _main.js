@@ -250,7 +250,8 @@ export default {
             
             <div class="row w-100">                             
 
-                <component v-if="!loading" @change-page="changePage" @change-menu="changeToMenu" @change-import="changeToImport" @update-item="updateItem" @insert-thuc-pham="insertThucPham" @remove-thuc-pham="removeThucPham" :is="comName"/>
+                <component v-if="!loading" @change-page="changePage" @thanh-toan="thanhtoan"
+                 @change-menu="changeToMenu" @change-import="changeToImport" @update-item="updateItem" @insert-thuc-pham="insertThucPham" @remove-thuc-pham="removeThucPham" :is="comName"/>
                 <component v-else :is="comName"/>                                   
             
             </div>

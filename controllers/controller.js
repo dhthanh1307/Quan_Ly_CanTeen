@@ -45,6 +45,7 @@ module.exports = {
 
     thanhtoan: async (req, res, next) => {
         try {
+            console.log('thanhtoan');
             const body = req.body;
             const mabanhang = await db.insertHoaDon(body.PhuongThuc, body.SoTien);
             for (let i = 0; i < body.ListEdit.length; i++)

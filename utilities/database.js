@@ -41,6 +41,7 @@ module.exports = {
     },
 
     insertHoaDon: async (PhuongThuc, SoTien) => {
+        console.log(SoTien);
         const query = `INSERT INTO "HoaDon"("PhuongThuc","SoTien") VALUES ( '${PhuongThuc}', '${SoTien}') RETURNING "MaBanHang"`;
         const result = await db.query(query);
         return result[0].MaBanHang;

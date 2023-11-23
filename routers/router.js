@@ -8,10 +8,7 @@ router.get('/getAllThucPham', controller.getAllThucPham);
 router.use('/', express.json());
 router.post('/login', controller.findUser);
 router.post('/updateMonAn', controller.updateMonAn);
-
 router.post('/insertHoaDon', controller.thanhtoan);
-
-
 router.post('/insertThucPham', controller.insertThucPham);
 router.post('/removeThucPham', controller.removeThucPham);
 
