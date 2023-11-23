@@ -46,8 +46,9 @@ async function fetchPost(url, obj) {
         body: JSON.stringify(obj),
     });
     if (response.status >= 200 && response.status < 300) {
-        const text = await response.text();
-        return text;
+        const json = await response.json();
+        console.log(json);
+        return json;
     } else {
         if (response.status === 500) {
             window.location = '/';
@@ -142,7 +143,7 @@ export default {
     methods: {
         async doLogin(username, password, isAdmin) {
             const res = await fetchLogin(username, password, isAdmin);
-            if (res == 'true') {
+            if (res.result) {
                 this.login = true;
                 this.isAdmin = isAdmin;
             }

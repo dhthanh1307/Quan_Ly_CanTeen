@@ -13,12 +13,7 @@ module.exports = {
             console.log('find user');
             const body = req.body;
             const result = await db.findUser(body.username, body.password, body.isAdmin);
-            if (result) {
-                res.send(true);
-            }
-            else {
-                res.send(false);
-            }
+            res.json({ result: result });
         } catch (err) {
             next(err);
         }
