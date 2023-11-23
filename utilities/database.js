@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { MonAn } = require('./general');
+const { MonAn, ThucPham } = require('./general');
 const pgp = require('pg-promise')({
     capSQL: true
 });
@@ -14,6 +14,15 @@ const cn = {
 const db = pgp(cn);
 
 module.exports = {
+    findUser: async (username, password, isAdmin) => {
+        const query = `SELECT * FROM "User" WHERE "Username" = $1 AND "Password" = $2 AND "isAdmin" = $3`;
+        const values = [username, password, isAdmin];
+        const data = await db.query(query, values);
+        if (data.length > 0) {
+            return true;
+        }
+        else return false;
+    },
     getAllMonAn: async () => {
         let dbcn = null;
         try {
@@ -30,16 +39,47 @@ module.exports = {
         const query = `UPDATE "MonAn" SET "TenMonAn" = '${TenMonAn}', "GiaBan" = '${GiaBan}' WHERE "MaMonAn" = '${MaMonAn}'`;
         await db.query(query);
     },
-    insertHoaDon: async (PhuongThuc,SoTien)=>{
-        const query=`INSERT INTO "HoaDon"("PhuongThuc","SoTien") VALUES ( '${PhuongThuc}', '${SoTien}') RETURNING "MaBanHang"`;
-        const result =await db.query(query);
+
+    insertHoaDon: async (PhuongThuc, SoTien) => {
+        const query = `INSERT INTO "HoaDon"("PhuongThuc","SoTien") VALUES ( '${PhuongThuc}', '${SoTien}') RETURNING "MaBanHang"`;
+        const result = await db.query(query);
         return result[0].MaBanHang;
     },
-    insertBanHang: async (MaBanHang,MonAn)=>{
+    insertBanHang: async (MaBanHang, MonAn) => {
         console.log(MonAn);
         const currentDate = new Date();
-        const query=`INSERT INTO "BanHang" VALUES ('${MaBanHang}','${MonAn.MaMonAn}','${MonAn.SoLuong}','${currentDate.toISOString()}')`;
+        const query = `INSERT INTO "BanHang" VALUES ('${MaBanHang}','${MonAn.MaMonAn}','${MonAn.SoLuong}','${currentDate.toISOString()}')`;
         await db.query(query);
+    },
+    getAllThucPham: async () => {
+        let dbcn = null;
+        try {
+            dbcn = await db.connect();
+            const data = await dbcn.any(`SELECT * FROM "ThucPham" ORDER BY "MaThucPham" ASC`);
+            return data.map(dbThucPham => new ThucPham(dbThucPham));
+        } catch (error) {
+            throw error;
+        } finally {
+            dbcn.done();
+        }
+    },
+    insertThucPham: async (MaThucPham, SoLuongNhap, NgayNhap, GiaNhap) => {
+        const insertQuery = `INSERT INTO "NhapHang" ("MaThucPham", "SoLuongNhap", "NgayNhap", "GiaNhap") VALUES ($1, $2, $3, $4) RETURNING "MaNhapHang"`;
+        const insertValues = [MaThucPham, SoLuongNhap, NgayNhap, GiaNhap];
+        const insertResult = await db.query(insertQuery, insertValues);
+
+        if (insertResult.length > 0) {
+            const updateQuery = `UPDATE "ThucPham" SET "SoLuongTrongKho" = "SoLuongTrongKho" + $1 WHERE "MaThucPham" = $2`;
+            const updateValues = [SoLuongNhap, MaThucPham];
+            await db.query(updateQuery, updateValues);
+        }
+        return insertResult[0].MaNhapHang;
+    },
+    removeThucPham: async (MaThucPham, SoLuong) => {
+        const updateQuery = `UPDATE "ThucPham" SET "SoLuongTrongKho" = "SoLuongTrongKho" - $1 WHERE "MaThucPham" = $2`;
+        const updateValues = [SoLuong, MaThucPham];
+        await db.query(updateQuery, updateValues);
+
     },
     find: async (tbName, ID) => {
         const query = `SELECT * FROM "${tbName}" WHERE id = ${ID}`;
