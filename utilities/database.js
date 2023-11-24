@@ -80,7 +80,18 @@ module.exports = {
         const updateQuery = `UPDATE "ThucPham" SET "SoLuongTrongKho" = "SoLuongTrongKho" - $1 WHERE "MaThucPham" = $2`;
         const updateValues = [SoLuong, MaThucPham];
         await db.query(updateQuery, updateValues);
-
+    },
+    searchThucPham: async (Keyword) => {
+        let dbcn = null;
+        try {
+            dbcn = await db.connect();
+            const data = await dbcn.any(`SELECT * FROM "ThucPham" WHERE "TenThucPham" ILIKE '%${Keyword}%' ORDER BY "MaThucPham" ASC`);
+            return data.map(dbThucPham => new ThucPham(dbThucPham));
+        } catch (error) {
+            throw error;
+        } finally {
+            dbcn.done();
+        }
     },
     find: async (tbName, ID) => {
         const query = `SELECT * FROM "${tbName}" WHERE id = ${ID}`;

@@ -80,9 +80,6 @@ async function fetchUpdateMonAn(ID, Name, Price) {
     return json;
 }
 
-
-
-
 async function fetchGetAllThucPham() {
     const url = "http://localhost:3000/getAllThucPham";
     const json = await fetchGet(url);
@@ -105,6 +102,16 @@ async function fetchRemoveThucPham(MaThucPham, SoLuong) {
     const url = `http://localhost:3000/removeThucPham`;
     const json = await fetchPost(url, { MaThucPham: MaThucPham, SoLuong: SoLuong });
     return json;
+}
+
+async function fetchSearchThucPham(Keyword) {
+    const url = `http://localhost:3000/searchThucPham`;
+    const json = await fetchPost(url, { Keyword: Keyword });
+    return {
+        displayArrayThucPham: json.map((ThucPham) => {
+            return ThucPham;
+        })
+    };
 }
 
 
@@ -235,6 +242,14 @@ export default {
             } catch (error) {
                 console.log(error);
             }
+        },
+        async searchThucPham(Keyword) {
+            try {
+                const res = await fetchSearchThucPham(Keyword);
+                this.ListThucPham = res.displayArrayThucPham;
+            } catch (error) {
+                console.log(error);
+            }
         }
     },
     beforeMount() {
@@ -251,8 +266,7 @@ export default {
             
             <div class="row w-100">                             
 
-                <component v-if="!loading" @change-page="changePage" @thanh-toan="thanhtoan"
-                 @change-menu="changeToMenu" @change-import="changeToImport" @update-item="updateItem" @insert-thuc-pham="insertThucPham" @remove-thuc-pham="removeThucPham" :is="comName"/>
+                <component v-if="!loading" @change-page="changePage" @thanh-toan="thanhtoan" @change-menu="changeToMenu" @change-import="changeToImport" @update-item="updateItem" @insert-thuc-pham="insertThucPham" @remove-thuc-pham="removeThucPham" @search-thuc-pham="searchThucPham" :is="comName"/>
                 <component v-else :is="comName"/>                                   
             
             </div>

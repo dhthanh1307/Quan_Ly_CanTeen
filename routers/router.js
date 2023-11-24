@@ -11,6 +11,7 @@ router.post('/updateMonAn', controller.updateMonAn);
 router.post('/insertHoaDon', controller.thanhtoan);
 router.post('/insertThucPham', controller.insertThucPham);
 router.post('/removeThucPham', controller.removeThucPham);
+router.post('/searchThucPham', controller.searchThucPham);
 
 
 module.exports = router;

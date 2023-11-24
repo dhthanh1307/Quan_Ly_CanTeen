@@ -50,6 +50,12 @@ export default{
                     this.$emit('removeThucPham', $('#ID-input-e').val(), $('#Quantity-input-e').val());
                 }
             }
+        },
+        emitSearch() {
+            if ($('#inputKeyword').val().trim() !== '') {
+                this.$emit('searchThucPham', $('#inputKeyword').val());
+            }
+            else this.$emit('searchThucPham', "");
         }
     },
     template:
@@ -59,7 +65,11 @@ export default{
         </nav>
         <div class="row d-flex flex-row col-12 ms-4">
             <div class="d-flex flex-column col-7">
-                <div class="card text-bg-success m-4 goods-display">
+                <div class="d-flex">
+                    <input id="inputKeyword" class="form-control me-2" placeholder="Tìm kiếm">
+                    <button class="btn btn-outline-success w-25" @click="emitSearch">Tìm kiếm</button>
+                </div>
+                <div class="card text-bg-success mt-4 goods-display">
                     <div class="card-body d-flex flex-row flex-wrap justify-content-between align-content-start overflow-hidden overflow-y-auto gap-4">
                     <template v-for="thucpham in ListThucPham">
                     <div :id="thucpham.MaThucPham" @click="chooseItem(thucpham.MaThucPham, thucpham.TenThucPham, thucpham.DonViTinh, thucpham.SoLuongTrongKho)" :class="{ 'chosen-item': selectedId === thucpham.MaThucPham }" class="card text-bg-light menu-item d-flex flex-column justify-content-evenly text-center">

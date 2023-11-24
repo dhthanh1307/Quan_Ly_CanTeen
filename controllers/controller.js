@@ -32,7 +32,7 @@ module.exports = {
             console.log('update mon an');
             const body = req.body;
             const result = await db.updateMonAn(body.MaMonAn, body.TenMonAn, body.GiaBan);
-            res.sendStatus(200);
+            res.json({ });
         } catch (err) {
             next(err);
         }
@@ -66,7 +66,7 @@ module.exports = {
             console.log('insert thuc pham');
             const body = req.body;
             const result = await db.insertThucPham(body.MaThucPham, body.SoLuongNhap, body.NgayNhap, body.GiaNhap);
-            res.sendStatus(200);
+            res.json({ });
         } catch (err) {
             next(err);
         }
@@ -76,10 +76,20 @@ module.exports = {
             console.log('remove thuc pham');
             const body = req.body;
             const result = await db.removeThucPham(body.MaThucPham, body.SoLuong);
-            res.sendStatus(200);
+            res.json({ });
         } catch (err) {
             next(err);
 
+        }
+    },
+    searchThucPham: async (req, res, next) => {
+        try {
+            const body = req.body;
+            console.log('search thuc pham keyword: ' + body.Keyword);
+            const data = await db.searchThucPham(body.Keyword);
+            res.json(data);
+        } catch (err) {
+            next(err);
         }
     }
 }
