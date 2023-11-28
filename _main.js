@@ -285,12 +285,14 @@ export default {
                 console.log(error);
             }
         },
-<<<<<<< Updated upstream
         async searchThucPham(Keyword) {
             try {
                 const res = await fetchSearchThucPham(Keyword);
                 this.ListThucPham = res.displayArrayThucPham;
-=======
+            }catch(e){
+                console.log(e);
+            }
+        },
         async fetchRemoveStaff(username){
             const url = `http://localhost:3000/removeStaff`;
             const json = await fetchPost(url, {Username:username});
@@ -308,7 +310,6 @@ export default {
                 const url=`http://localhost:3000/insertStaff`;
                 const res = await fetchPost(url,{Username:name,Password:pw,Admin:admin});
                 await this.loadStaff();
->>>>>>> Stashed changes
             } catch (error) {
                 console.log(error);
             }
@@ -328,13 +329,9 @@ export default {
             
             <div class="row w-100">                             
 
-<<<<<<< Updated upstream
-                <component v-if="!loading" @change-page="changePage" @thanh-toan="thanhtoan" @change-menu="changeToMenu" @change-import="changeToImport" @update-item="updateItem" @insert-thuc-pham="insertThucPham" @remove-thuc-pham="removeThucPham" @search-thuc-pham="searchThucPham" :is="comName"/>
-=======
                 <component v-if="!loading" @change-page="changePage" @thanh-toan="thanhtoan" @thongKe="thongke"
                 @removeStaff="removeStaff" @insert-staff="insertStaff"
-                @change-menu="changeToMenu" @change-import="changeToImport" @update-item="updateItem" @insert-thuc-pham="insertThucPham" @remove-thuc-pham="removeThucPham" :is="comName"/>
->>>>>>> Stashed changes
+                @change-menu="changeToMenu" @change-import="changeToImport" @update-item="updateItem" @insert-thuc-pham="insertThucPham" @remove-thuc-pham="removeThucPham" @search-thuc-pham="searchThucPham"  :is="comName"/>
                 <component v-else :is="comName"/>                                   
             
             </div>
