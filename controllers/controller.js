@@ -32,7 +32,7 @@ module.exports = {
             console.log('update mon an');
             const body = req.body;
             const result = await db.updateMonAn(body.MaMonAn, body.TenMonAn, body.GiaBan);
-            res.json({ });
+            res.json({});
         } catch (err) {
             next(err);
         }
@@ -41,22 +41,22 @@ module.exports = {
     thanhtoan: async (req, res, next) => {
         try {
             console.log('check so luong');
-            var ktra=false;
+            var ktra = false;
             const body = req.body;
-            const chitieu=await db.checkChiTieu(body.ListEdit);
-            const thucpham=await db.checkThucPham(body.ListEdit);
-            console.log('thucpham: ',thucpham);
-            console.log('chitieu: ',chitieu);
+            const chitieu = await db.checkChiTieu(body.ListEdit);
+            const thucpham = await db.checkThucPham(body.ListEdit);
+            console.log('thucpham: ', thucpham);
+            console.log('chitieu: ', chitieu);
 
-            if(chitieu&&thucpham){
-                ktra=true;
+            if (chitieu && thucpham) {
+                ktra = true;
                 console.log('thanhtoan');
                 const mabanhang = await db.insertHoaDon(body.PhuongThuc, body.SoTien);
                 for (let i = 0; i < body.ListEdit.length; i++)
                     if (body.ListEdit[i].SoLuong > 0)
                         await db.insertBanHang(mabanhang, body.ListEdit[i]);
             }
-            res.json({ktra});
+            res.json({ ktra });
 
         } catch (e) {
             next(e);
@@ -76,7 +76,7 @@ module.exports = {
             console.log('insert thuc pham');
             const body = req.body;
             const result = await db.insertThucPham(body.MaThucPham, body.SoLuongNhap, body.NgayNhap, body.GiaNhap);
-            res.json({ });
+            res.json({});
         } catch (err) {
             next(err);
         }
@@ -86,19 +86,23 @@ module.exports = {
             console.log('remove thuc pham');
             const body = req.body;
             const result = await db.removeThucPham(body.MaThucPham, body.SoLuong);
-            res.json({ });
+            res.json({});
         } catch (err) {
             next(err);
 
         }
     },
-<<<<<<< Updated upstream
     searchThucPham: async (req, res, next) => {
         try {
             const body = req.body;
             console.log('search thuc pham keyword: ' + body.Keyword);
             const data = await db.searchThucPham(body.Keyword);
-=======
+
+        }catch(e){
+            console.log(e);
+        }
+    },
+
     thongke: async (req, res, next) => {
         try {
             console.log('thong ke doanh thu ');
@@ -114,13 +118,10 @@ module.exports = {
         try {
             console.log('nhan su');
             const data = await db.getNhanSu();
->>>>>>> Stashed changes
             res.json(data);
         } catch (err) {
             next(err);
         }
-<<<<<<< Updated upstream
-=======
     },
     removeStaff: async (req, res, next) => {
         try {
@@ -136,12 +137,11 @@ module.exports = {
     insertStaff: async (req, res, next) => {
         try {
             console.log('insert nhan su');
-            const body = req.body;        
+            const body = req.body;
             await db.insertStaff(body.Username, body.Password, body.Admin);
             res.json({});
         } catch (e) {
             next(e);
         }
->>>>>>> Stashed changes
     }
 }
