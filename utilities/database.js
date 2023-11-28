@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { MonAn, ThucPham } = require('./general');
+const { MonAn, ThucPham, DoanhThu, NhanSu } = require('./general');
 const pgp = require('pg-promise')({
     capSQL: true
 });
@@ -35,21 +35,76 @@ module.exports = {
             dbcn.done();
         }
     },
+    checkChiTieu: async (listmonan) => {
+        let dbcn = null;
+        try {
+            dbcn = await db.connect();
+            for (const monan of listmonan) {
+                try {
+                    const data = await dbcn.any(`
+                        SELECT * FROM "ChiTieu"
+                        WHERE "Ngay" = $1 AND "MaMonAn" = $2 AND "SoLuong" < $3
+                    `, [new Date(), monan.MaMonAn, monan.SoLuong]);
+
+                    if (data.length > 0) {
+                        return false;
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+            return true;
+        } catch (error) {
+            throw error;
+        } finally {
+            dbcn.done();
+        }
+    },
+    checkThucPham: async (listmonan) => {
+        let dbcn = null;
+        try {
+            dbcn = await db.connect();
+            for (const monan of listmonan) {
+                try {
+                    const data = await dbcn.any(`
+                        SELECT * FROM "ThucPham"
+                        WHERE  "MaThucPham" = $1 AND "SoLuongTrongKho" >= $2 AND $2!=0
+                    `, [monan.MaMonAn, monan.SoLuong]);
+                    console.log('monan.MaMonAn:', monan.MaMonAn);
+                    console.log('monan.SoLuong:', monan.SoLuong);
+                    console.log('data:', data);
+    
+                    if (data.length > 0) {
+                        return true;
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+            return false;
+        } catch (error) {
+            throw error;
+        } finally {
+            dbcn.done();
+        }
+    },
     updateMonAn: async (MaMonAn, TenMonAn, GiaBan) => {
         const query = `UPDATE "MonAn" SET "TenMonAn" = '${TenMonAn}', "GiaBan" = '${GiaBan}' WHERE "MaMonAn" = '${MaMonAn}'`;
         await db.query(query);
     },
 
     insertHoaDon: async (PhuongThuc, SoTien) => {
-        console.log(SoTien);
         const query = `INSERT INTO "HoaDon"("PhuongThuc","SoTien") VALUES ( '${PhuongThuc}', '${SoTien}') RETURNING "MaBanHang"`;
         const result = await db.query(query);
         return result[0].MaBanHang;
     },
     insertBanHang: async (MaBanHang, MonAn) => {
-        console.log(MonAn);
         const currentDate = new Date();
         const query = `INSERT INTO "BanHang" VALUES ('${MaBanHang}','${MonAn.MaMonAn}','${MonAn.SoLuong}','${currentDate.toISOString()}')`;
+        await db.query(query);
+    },
+    insertStaff: async (username, password, isadmin) => {
+        const query = `INSERT INTO "User" VALUES ('${username}','${password}','${isadmin}')`;
         await db.query(query);
     },
     getAllThucPham: async () => {
@@ -58,6 +113,75 @@ module.exports = {
             dbcn = await db.connect();
             const data = await dbcn.any(`SELECT * FROM "ThucPham" ORDER BY "MaThucPham" ASC`);
             return data.map(dbThucPham => new ThucPham(dbThucPham));
+        } catch (error) {
+            throw error;
+        } finally {
+            dbcn.done();
+        }
+    },
+    getNhanSu: async () => {
+        let dbcn = null;
+        try {
+            dbcn = await db.connect();
+            const data = await dbcn.any(`SELECT * FROM "User" WHERE "isAdmin"=false`);
+            return data.map(dbNhanSu => new NhanSu(dbNhanSu));
+        } catch (error) {
+            throw error;
+        } finally {
+            dbcn.done();
+        }
+    },
+    thongke: async (Date, type) => {
+        let dbcn = null;
+        try {
+            dbcn = await db.connect();
+            //     const data = await dbcn.any(`SELECT
+            //                                     "MonAn"."MaMonAn",
+            //                                     "MonAn"."TenMonAn",
+            //                                     "MonAn"."GiaBan",
+            //                                     SUM("BanHang"."SoLuong") AS "SoLuongBan",
+            //                                     SUM("BanHang"."SoLuong" * "MonAn"."GiaBan") AS "TongThanhTien"
+            //                                 FROM
+            //                                     "BanHang"
+            //                                 JOIN
+            //                                     "MonAn" ON "BanHang"."MaMonAn" = "MonAn"."MaMonAn"
+            //                                 WHERE
+            //                                     "BanHang"."NgayBan" = $1
+            //                                 GROUP BY
+            //                                     "MonAn"."MaMonAn", "MonAn"."TenMonAn", "MonAn"."GiaBan";
+            //  `,[Date]);
+            //     return data.map(dbDoanhThu => new DoanhThu(dbDoanhThu));
+            let query = `
+            SELECT
+                "MonAn"."MaMonAn",
+                "MonAn"."TenMonAn",
+                "MonAn"."GiaBan",
+                SUM("BanHang"."SoLuong") AS "SoLuongBan",
+                SUM("BanHang"."SoLuong" * "MonAn"."GiaBan") AS "TongThanhTien"
+            FROM
+                "BanHang"
+            JOIN
+                "MonAn" ON "BanHang"."MaMonAn" = "MonAn"."MaMonAn"
+            WHERE
+        `;
+
+
+            if (type === 'date') {
+                query += `"BanHang"."NgayBan" = $1`;
+            } else if (type === 'month') {
+                query += `EXTRACT(MONTH FROM "BanHang"."NgayBan"::date) = EXTRACT(MONTH FROM $1::date)
+                      AND EXTRACT(YEAR FROM "BanHang"."NgayBan"::date) = EXTRACT(YEAR FROM $1::date)`;
+            } else if (type === 'year') {
+                query += `EXTRACT(YEAR FROM "BanHang"."NgayBan"::date) = EXTRACT(YEAR FROM $1::date)`;
+            }
+
+            query += `
+            GROUP BY
+                "MonAn"."MaMonAn", "MonAn"."TenMonAn", "MonAn"."GiaBan";
+        `;
+
+            const data = await dbcn.any(query, [Date]);
+            return data.map(dbDoanhThu => new DoanhThu(dbDoanhThu));
         } catch (error) {
             throw error;
         } finally {
@@ -92,6 +216,12 @@ module.exports = {
         } finally {
             dbcn.done();
         }
+    },
+    removeStaff: async (username) => {
+        const deleteQuery = `DELETE FROM "User" WHERE "Username" = $1 RETURNING *`;
+        const deleteValues = [username];
+        await db.query(deleteQuery, deleteValues);
+
     },
     find: async (tbName, ID) => {
         const query = `SELECT * FROM "${tbName}" WHERE id = ${ID}`;

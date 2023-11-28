@@ -16,6 +16,7 @@ export default{
             <button @click="$emit('changePage', 'vcreport')" type="button" class="btn btn-success me-4">Báo cáo</button>
             <button @click="$emit('changeImport')" type="button" class="btn btn-success me-4">Kho hàng</button>
             <button @click="$emit('changePage', 'vcsell')" type="button" class="btn btn-success me-4">Bán hàng</button>
+            <button @click="$emit('changeStaff')" type="button" class="btn btn-success me-4">Nhân sự</button>
             </form>
         </div>
     </nav>

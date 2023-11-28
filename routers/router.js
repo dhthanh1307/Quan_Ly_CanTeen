@@ -11,7 +11,14 @@ router.post('/updateMonAn', controller.updateMonAn);
 router.post('/insertHoaDon', controller.thanhtoan);
 router.post('/insertThucPham', controller.insertThucPham);
 router.post('/removeThucPham', controller.removeThucPham);
+<<<<<<< Updated upstream
 router.post('/searchThucPham', controller.searchThucPham);
 
+=======
+router.post('/removeStaff', controller.removeStaff);
+router.post('/thongke', controller.thongke);
+router.get('/nhansu', controller.nhansu);
+router.post('/insertStaff', controller.insertStaff);
+>>>>>>> Stashed changes
 
 module.exports = router;

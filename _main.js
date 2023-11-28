@@ -92,6 +92,7 @@ async function fetchGetAllThucPham() {
     };
 }
 
+
 async function fetchInsertThucPham(MaThucPham, SoLuongNhap, NgayNhap, GiaNhap) {
     const url = `http://localhost:3000/insertThucPham`;
     const json = await fetchPost(url, { MaThucPham: MaThucPham, SoLuongNhap: SoLuongNhap, NgayNhap: NgayNhap, GiaNhap:GiaNhap });
@@ -115,7 +116,7 @@ async function fetchSearchThucPham(Keyword) {
 }
 
 
-import { computed } from 'vue'
+import { computed  ,watch,} from 'vue'
 import vclogin from './_login.js'
 import vcnav from './_nav.js'
 import vccontent from './_content.js'
@@ -125,6 +126,9 @@ import vcreport from './_report.js'
 import vcmenu from './_menu.js'
 import vcimport from './_import.js'
 import vcsell from './_sell.js'
+import vcstaff from './_staff.js'
+
+
 export default {
     data() {
         return {
@@ -135,16 +139,22 @@ export default {
             comName: 'vccontent',
             loading: false,
             ListMonAn: [],
-            ListThucPham: []
+            ListThucPham: [],
+            DoanhThu:[],
+            NhanSu:[],
+            ChiTieu:[],
         }
     },
     components: {
-        vclogin, vcnav, vccontent, vcinfo, vcfooter, vcreport, vcmenu, vcimport, vcsell,
+        vclogin, vcnav, vccontent, vcinfo, vcfooter, vcreport, vcmenu, vcimport, vcsell,vcstaff
     },
     provide() {
         return {
             ListMonAn: computed(() => this.ListMonAn),
-            ListThucPham: computed(() => this.ListThucPham)
+            ListThucPham: computed(() => this.ListThucPham),
+            DoanhThu: computed(()=>this.DoanhThu),
+            NhanSu: computed(()=>this.NhanSu),
+
         }
     },
     methods: {
@@ -200,7 +210,23 @@ export default {
         async thanhtoan(result,ListEdit){
             const url = `http://localhost:3000/insertHoaDon`;
             const json = await fetchPost(url, {PhuongThuc:`online`,SoTien:result,ListEdit:ListEdit});
+            if(json.ktra===false){
+                alert('Số lượng sản phẩm trong kho không đủ');
+            }
+            else{
+                alert('Thanh toán thành công');
+            }
             return json;
+        },
+        async thongke(date,option){
+            try {
+                const url = `http://localhost:3000/thongke`;
+                const json = await fetchPost(url, { Date: date, Type: option });
+                this.DoanhThu = json;
+                console.log(this.DoanhThu);
+            } catch (error) {
+                console.error('Error during thongke API call:', error);
+            }
         },
         async updateItem(ID, Name, Price) {
             try {
@@ -226,6 +252,22 @@ export default {
                 console.log(error);
             }
         },
+        async loadStaff(){
+            const url = `http://localhost:3000/nhansu`;
+            const json = await fetchGet(url);
+            this.NhanSu = json;
+            this.loading = false;
+        },
+        async changeToStaff() {     
+            this.comName = 'vcstaff';
+            this.loading = true;
+            try {
+                this.loadStaff();
+            }
+            catch (error) {
+                console.log(error);
+            }
+        },
         async insertThucPham(MaThucPham, SoLuongNhap, GiaNhap) {
             try {
                 let NgayNhap = this.currentDate();
@@ -243,10 +285,30 @@ export default {
                 console.log(error);
             }
         },
+<<<<<<< Updated upstream
         async searchThucPham(Keyword) {
             try {
                 const res = await fetchSearchThucPham(Keyword);
                 this.ListThucPham = res.displayArrayThucPham;
+=======
+        async fetchRemoveStaff(username){
+            const url = `http://localhost:3000/removeStaff`;
+            const json = await fetchPost(url, {Username:username});
+        },
+        async removeStaff(username){
+            try {
+                await this.fetchRemoveStaff(username);
+                await this.loadStaff();
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        async insertStaff(name,pw,admin){
+            try {
+                const url=`http://localhost:3000/insertStaff`;
+                const res = await fetchPost(url,{Username:name,Password:pw,Admin:admin});
+                await this.loadStaff();
+>>>>>>> Stashed changes
             } catch (error) {
                 console.log(error);
             }
@@ -259,14 +321,20 @@ export default {
         `<div class="container" v-if="login">
 
             <div class="row mt-4">
-                <vcnav @change-page="changePage" @change-menu="changeToMenu" @change-import="changeToImport"/>
+                <vcnav @change-page="changePage" @change-menu="changeToMenu" @change-import="changeToImport"  @change-staff="changeToStaff"/>
             </div>
 
             <vcinfo v-if="comName=='vccontent'"/>
             
             <div class="row w-100">                             
 
+<<<<<<< Updated upstream
                 <component v-if="!loading" @change-page="changePage" @thanh-toan="thanhtoan" @change-menu="changeToMenu" @change-import="changeToImport" @update-item="updateItem" @insert-thuc-pham="insertThucPham" @remove-thuc-pham="removeThucPham" @search-thuc-pham="searchThucPham" :is="comName"/>
+=======
+                <component v-if="!loading" @change-page="changePage" @thanh-toan="thanhtoan" @thongKe="thongke"
+                @removeStaff="removeStaff" @insert-staff="insertStaff"
+                @change-menu="changeToMenu" @change-import="changeToImport" @update-item="updateItem" @insert-thuc-pham="insertThucPham" @remove-thuc-pham="removeThucPham" :is="comName"/>
+>>>>>>> Stashed changes
                 <component v-else :is="comName"/>                                   
             
             </div>

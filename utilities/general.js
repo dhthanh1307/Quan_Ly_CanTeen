@@ -16,5 +16,22 @@ class ThucPham {
         this.SoLuongTrongKho = rawThucPham.SoLuongTrongKho;
     }
 };
+class DoanhThu{
+    constructor(rawDoanhThu){
+        this.MaMonAn=rawDoanhThu.MaMonAn;
+        this.TenMonAn=rawDoanhThu.TenMonAn;
+        this.GiaBan=rawDoanhThu.GiaBan;
+        this.SoLuongBan=rawDoanhThu.SoLuongBan;
+        this.TongThanhTien=rawDoanhThu.TongThanhTien;
+    }
+};
+class NhanSu{
+    constructor(temp){
+        this.Username=temp.Username;
+        this.Password=temp.Password;
+        this.isAdmin=temp.isAdmin;
+    
+    }
+};
 
-module.exports = { MonAn, ThucPham };
+module.exports = { MonAn, ThucPham,DoanhThu ,NhanSu};

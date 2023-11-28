@@ -40,13 +40,23 @@ module.exports = {
 
     thanhtoan: async (req, res, next) => {
         try {
-            console.log('thanhtoan');
+            console.log('check so luong');
+            var ktra=false;
             const body = req.body;
-            const mabanhang = await db.insertHoaDon(body.PhuongThuc, body.SoTien);
-            for (let i = 0; i < body.ListEdit.length; i++)
-                if (body.ListEdit[i].SoLuong > 0)
-                    await db.insertBanHang(mabanhang, body.ListEdit[i]);
-            res.sendStatus(200);
+            const chitieu=await db.checkChiTieu(body.ListEdit);
+            const thucpham=await db.checkThucPham(body.ListEdit);
+            console.log('thucpham: ',thucpham);
+            console.log('chitieu: ',chitieu);
+
+            if(chitieu&&thucpham){
+                ktra=true;
+                console.log('thanhtoan');
+                const mabanhang = await db.insertHoaDon(body.PhuongThuc, body.SoTien);
+                for (let i = 0; i < body.ListEdit.length; i++)
+                    if (body.ListEdit[i].SoLuong > 0)
+                        await db.insertBanHang(mabanhang, body.ListEdit[i]);
+            }
+            res.json({ktra});
 
         } catch (e) {
             next(e);
@@ -82,14 +92,56 @@ module.exports = {
 
         }
     },
+<<<<<<< Updated upstream
     searchThucPham: async (req, res, next) => {
         try {
             const body = req.body;
             console.log('search thuc pham keyword: ' + body.Keyword);
             const data = await db.searchThucPham(body.Keyword);
+=======
+    thongke: async (req, res, next) => {
+        try {
+            console.log('thong ke doanh thu ');
+            const body = req.body;
+            const result = await db.thongke(body.Date, body.Type);
+            console.log(result);
+            res.json(result);
+        } catch (err) {
+            next(err);
+        }
+    },
+    nhansu: async (req, res, next) => {
+        try {
+            console.log('nhan su');
+            const data = await db.getNhanSu();
+>>>>>>> Stashed changes
             res.json(data);
         } catch (err) {
             next(err);
         }
+<<<<<<< Updated upstream
+=======
+    },
+    removeStaff: async (req, res, next) => {
+        try {
+            console.log('xoa nhan vien');
+            const body = req.body;
+            await db.removeStaff(body.Username);
+            res.json({});
+        } catch (err) {
+            next(err);
+        }
+
+    },
+    insertStaff: async (req, res, next) => {
+        try {
+            console.log('insert nhan su');
+            const body = req.body;        
+            await db.insertStaff(body.Username, body.Password, body.Admin);
+            res.json({});
+        } catch (e) {
+            next(e);
+        }
+>>>>>>> Stashed changes
     }
 }
