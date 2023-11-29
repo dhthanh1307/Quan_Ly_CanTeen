@@ -4,7 +4,8 @@ module.exports = {
     render: async (req, res, next) => {
         try {
             res.render('_index');
-        } catch (err) {
+        }
+        catch (err) {
             next(err);
         }
     },
@@ -14,7 +15,8 @@ module.exports = {
             const body = req.body;
             const result = await db.findUser(body.username, body.password, body.isAdmin);
             res.json({ result: result });
-        } catch (err) {
+        }
+        catch (err) {
             next(err);
         }
     },
@@ -23,7 +25,8 @@ module.exports = {
             console.log('all mon an');
             const data = await db.getAllMonAn();
             res.json(data);
-        } catch (err) {
+        }
+        catch (err) {
             next(err);
         }
     },
@@ -33,7 +36,8 @@ module.exports = {
             const body = req.body;
             const result = await db.updateMonAn(body.MaMonAn, body.TenMonAn, body.GiaBan);
             res.json({});
-        } catch (err) {
+        }
+        catch (err) {
             next(err);
         }
     },
@@ -58,7 +62,8 @@ module.exports = {
             }
             res.json({ ktra });
 
-        } catch (e) {
+        }
+        catch (e) {
             next(e);
         }
     },
@@ -67,7 +72,8 @@ module.exports = {
             console.log('all thuc pham');
             const data = await db.getAllThucPham();
             res.json(data);
-        } catch (err) {
+        }
+        catch (err) {
             next(err);
         }
     },
@@ -77,7 +83,8 @@ module.exports = {
             const body = req.body;
             const result = await db.insertThucPham(body.MaThucPham, body.SoLuongNhap, body.NgayNhap, body.GiaNhap);
             res.json({});
-        } catch (err) {
+        }
+        catch (err) {
             next(err);
         }
     },
@@ -87,7 +94,8 @@ module.exports = {
             const body = req.body;
             const result = await db.removeThucPham(body.MaThucPham, body.SoLuong);
             res.json({});
-        } catch (err) {
+        }
+        catch (err) {
             next(err);
 
         }
@@ -97,12 +105,33 @@ module.exports = {
             const body = req.body;
             console.log('search thuc pham keyword: ' + body.Keyword);
             const data = await db.searchThucPham(body.Keyword);
-
-        }catch(e){
+            res.json(data);
+        }
+        catch(e){
             console.log(e);
         }
     },
-
+    setPortion: async (req, res, next) => {
+        try {
+            const body = req.body;
+            console.log('set chi tieu: ' + body.id);
+            const data = await db.setPortion(body.id, body.currentDate, body.portion);
+            res.json(data);
+        }
+        catch(e){
+            console.log(e);
+        }
+    },
+    checkPortionSet: async (req, res, next) => {
+        try {
+            const body = req.body;
+            const data = await db.checkPortionSet(body.id, body.currentDate);
+            res.json(data);
+        }
+        catch(e){
+            console.log(e);
+        }
+    },
     thongke: async (req, res, next) => {
         try {
             console.log('thong ke doanh thu ');

@@ -104,7 +104,7 @@ module.exports = {
         await db.query(query);
     },
     insertStaff: async (username, password, isadmin) => {
-        const query = `INSERT INTO "User" VALUES ('${username}','${password}','${isadmin}')`;
+        const query = `INSERT INTO "User" VALUES ('${username}','${password}','${isadmin}') ON CONFLICT ("Username") DO NOTHING`;
         await db.query(query);
     },
     getAllThucPham: async () => {
@@ -217,32 +217,36 @@ module.exports = {
             dbcn.done();
         }
     },
+    setPortion: async (id, currentDate, portion) => {
+        const checkQuery = `SELECT SUM(CT."SoLuongThucPham" * $1) <= SUM(TP."SoLuongTrongKho") AS check FROM "CongThuc" CT JOIN "ThucPham" TP ON CT."MaThucPham" = TP."MaThucPham" WHERE CT."MaMonAn" = $2 GROUP BY CT."MaMonAn"`;
+        const checkValues = [portion, id];
+        const checkResult = await db.any(checkQuery, checkValues);
+
+        if (checkResult[0].check) {
+            // const updateQuery = `UPDATE "ThucPham" TP SET TP."SoLuongTrongKho" = TP."SoLuongTrongKho" - CT."SoLuongThucPham" * $1 FROM "CongThuc" CT WHERE CT."MaMonAn" = $2 AND TP."MaThucPham" = CT."MaThucPham"`;
+            // const updateValues = [portion, id];
+            // await db.none(updateQuery, updateValues);
+    
+            const insertQuery = `INSERT INTO "ChiTieu" ("MaMonAn", "Ngay", "SoLuong") VALUES ($1, $2, $3)`;
+            const insertValues = [id, currentDate, portion];
+            await db.none(insertQuery, insertValues);
+    
+            return true;
+        } else {
+            return false;
+        }
+    },
+    checkPortionSet: async (id, currentDate) => {
+        const checkQuery = `SELECT EXISTS (SELECT 1 FROM "ChiTieu" WHERE "MaMonAn" = $1 AND "Ngay" = $2)`;
+        const checkValues = [id, currentDate];
+        const exists = await db.one(checkQuery, checkValues);
+
+        return exists.exists;
+    },
     removeStaff: async (username) => {
         const deleteQuery = `DELETE FROM "User" WHERE "Username" = $1 RETURNING *`;
         const deleteValues = [username];
         await db.query(deleteQuery, deleteValues);
 
-    },
-    find: async (tbName, ID) => {
-        const query = `SELECT * FROM "${tbName}" WHERE id = ${ID}`;
-        const data = await db.query(query);
-        return data[0];
-    },
-    update: async (tbName, ID, person) => {
-        const query = `UPDATE "${tbName}" SET first_name = '${person.first_name}', last_name = '${person.last_name}', email = '${person.email}', avatar = '${person.avatar}' WHERE id = ${ID}`;
-        await db.query(query);
-    },
-    remove: async (tbName, ID) => {
-        const query = `DELETE FROM "${tbName}" WHERE id = ${ID}`;
-        await db.query(query);
-    },
-    clear: async (tbName) => {
-        const query = `DELETE FROM "${tbName}"`;
-        await db.query(query);
-    },
-    count: async (tbName) => {
-        const query = `SELECT COUNT(*) FROM "${tbName}"`;
-        const rs = await db.query(query);
-        return rs[0].count;
     }
 }

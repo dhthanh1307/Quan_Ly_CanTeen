@@ -29,7 +29,7 @@ export default{
     template:
     `<div class="container w-100">
         <nav class="navbar w-100">
-            <span class="navbar-brand fs-1 fw-bold" >Quản lý menu</span>
+            <span class="navbar-brand fs-1 fw-bold user-select-none">Quản lý menu</span>
         </nav>
         <div class="row d-flex flex-row col-12 ms-4">
             <div class="d-flex flex-column col-8">
@@ -56,7 +56,7 @@ export default{
             </div>
             <div class="card text-bg-light m-4 menu-detail">
                 <div class="d-flex justify-content-center">
-                    <span class="fs-5 fw-bold">Chỉnh sửa</span>
+                    <span class="fs-5 fw-bold user-select-none">Chỉnh sửa</span>
                 </div>
                 <div class="d-flex flex-column">
                     <div class="mb-3">

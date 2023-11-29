@@ -39,7 +39,7 @@ export default {
     template: `
     <div class="container w-100 ">
         <nav class="navbar  w-100 ">
-                <span class="navbar-brand fs-1 fw-bold" >Bán hàng</span>
+                <span class="navbar-brand fs-1 fw-bold user-select-none">Bán hàng</span>
         </nav>
         <div class="row d-flex flex-row col-12 ms-4">
             <div class="d-flex flex-column col-8">
@@ -69,7 +69,7 @@ export default {
                 </div>
             </div>
             <div class="card text-bg-light m-4 menu-detail" style="height:650px">
-                    <h1 class="fs-4 fw-bold mt-4">Hóa đơn</h1>
+                    <h1 class="fs-4 fw-bold mt-4 user-select-none">Hóa đơn</h1>
                     <p class="  overflow-hidden overflow-y-auto" id="pick" style="height:420px" >
                         <template v-for="drink in ListMonAn">
                             <div class="row" v-if="drink.MaMonAn[0] == 'C' && drink.SoLuong>0">

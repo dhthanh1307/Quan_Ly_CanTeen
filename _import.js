@@ -59,9 +59,9 @@ export default{
         }
     },
     template:
-    `<div class="container w-100">
+    `<div class="container w-100 mb-5">
         <nav class="navbar w-100">
-            <span class="navbar-brand fs-1 fw-bold">Quản lý kho hàng</span>
+            <span class="navbar-brand fs-1 fw-bold user-select-none">Quản lý kho hàng</span>
         </nav>
         <div class="row d-flex flex-row col-12 ms-4">
             <div class="d-flex flex-column col-7">
@@ -83,7 +83,7 @@ export default{
             <div class="d-flex flex-column col-5">
                 <div class="card text-bg-light m-4 import-detail">
                     <div class="d-flex justify-content-center">
-                        <span class="fs-5 fw-bold">Nhập hàng</span>
+                        <span class="fs-5 fw-bold user-select-none">Nhập hàng</span>
                     </div>
                     <div class="d-flex flex-column">
                         <div class="d-flex flex-row flex-nowrap justify-content-between">
@@ -129,7 +129,7 @@ export default{
                 </div>
                 <div class="card text-bg-light m-4 export-detail">
                     <div class="d-flex justify-content-center">
-                        <span class="fs-5 fw-bold">Xuất hàng</span>
+                        <span class="fs-5 fw-bold user-select-none">Xuất hàng</span>
                     </div>
                     <div class="d-flex flex-column">
                         <div class="d-flex flex-row flex-nowrap justify-content-between">

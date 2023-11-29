@@ -47,7 +47,7 @@ export default{
     `
     <div class="container w-100 ">
         <nav class="navbar  w-100 ">
-                <span class="navbar-brand fs-1 fw-bold" >Nhân sự</span>
+                <span class="navbar-brand fs-1 fw-bold user-select-none">Nhân sự</span>
         </nav>
         <div class="row d-flex flex-row col-12 ms-4 justify-content-center">
             <div class="d-flex flex-column col-8 align-content-center" >
@@ -64,7 +64,7 @@ export default{
                         </template>
                     </div>
                 </div>
-                <div  class="text-center">
+                <div class="text-center">
                     <button type="button"  @click="removeStaff" class="btn btn-success ">Xóa tài khoản</button>
                 </div>
             </div>
@@ -82,7 +82,7 @@ export default{
                             Admin
                         </label>
                 </div>
-                <div  class="text-center" style="padding-top:300px">
+                <div class="text-center" style="padding-top:280px">
                     <button type="button" class="btn btn-success w-100" @click="insertStaff">Tạo tài khoản</button>
                 </div>
             </div>

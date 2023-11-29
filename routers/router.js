@@ -11,9 +11,9 @@ router.post('/updateMonAn', controller.updateMonAn);
 router.post('/insertHoaDon', controller.thanhtoan);
 router.post('/insertThucPham', controller.insertThucPham);
 router.post('/removeThucPham', controller.removeThucPham);
-
 router.post('/searchThucPham', controller.searchThucPham);
-
+router.post('/setPortion', controller.setPortion);
+router.post('/checkPortionSet', controller.checkPortionSet);
 
 router.post('/removeStaff', controller.removeStaff);
 router.post('/thongke', controller.thongke);
