@@ -223,9 +223,9 @@ module.exports = {
         const checkResult = await db.any(checkQuery, checkValues);
 
         if (checkResult[0].check) {
-            // const updateQuery = `UPDATE "ThucPham" TP SET TP."SoLuongTrongKho" = TP."SoLuongTrongKho" - CT."SoLuongThucPham" * $1 FROM "CongThuc" CT WHERE CT."MaMonAn" = $2 AND TP."MaThucPham" = CT."MaThucPham"`;
-            // const updateValues = [portion, id];
-            // await db.none(updateQuery, updateValues);
+            const updateQuery = `UPDATE "ThucPham" TP SET "SoLuongTrongKho" = "SoLuongTrongKho" - CT."SoLuongThucPham" * $1 FROM "CongThuc" CT WHERE CT."MaMonAn" = $2 AND TP."MaThucPham" = CT."MaThucPham"`;
+            const updateValues = [portion, id];
+            await db.none(updateQuery, updateValues);
     
             const insertQuery = `INSERT INTO "ChiTieu" ("MaMonAn", "Ngay", "SoLuong") VALUES ($1, $2, $3)`;
             const insertValues = [id, currentDate, portion];
