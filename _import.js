@@ -76,7 +76,7 @@ export default{
         <div class="row d-flex flex-row col-12 ms-4">
             <div class="d-flex flex-column align-items-center col-7">
                 <div class="d-flex w-100">
-                    <input id="inputKeyword" class="form-control me-2" placeholder="Tìm kiếm">
+                    <input v-on:keyup.enter="emitSearch()" id="inputKeyword" class="form-control me-2" placeholder="Tìm kiếm">
                     <button class="btn btn-outline-success w-25" @click="emitSearch">Tìm kiếm</button>
                 </div>
                 <div class="card text-bg-success mt-4 goods-display">
