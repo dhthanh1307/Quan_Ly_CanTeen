@@ -59,6 +59,8 @@ module.exports = {
                 for (let i = 0; i < body.ListEdit.length; i++)
                     if (body.ListEdit[i].SoLuong > 0)
                         await db.insertBanHang(mabanhang, body.ListEdit[i]);
+                db.updateChiTieu(body.ListEdit);
+                db.updateThucPham(body.ListEdit);
             }
             res.json({ ktra });
 

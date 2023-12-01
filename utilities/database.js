@@ -40,18 +40,23 @@ module.exports = {
         try {
             dbcn = await db.connect();
             for (const monan of listmonan) {
-                try {
-                    const data = await dbcn.any(`
-                        SELECT * FROM "ChiTieu"
-                        WHERE "Ngay" = $1 AND "MaMonAn" = $2 AND "SoLuong" < $3
-                    `, [new Date(), monan.MaMonAn, monan.SoLuong]);
-
-                    if (data.length > 0) {
-                        return false;
+                if(monan.MaMonAn[0]=='C'&&monan.SoLuong>0){
+                    try {
+                        const data = await dbcn.any(`
+                            SELECT * FROM "ChiTieu"
+                            WHERE ("Ngay" = $1 AND "MaMonAn" = $2 AND "SoLuong" < $3 ) OR NOT EXISTS (
+                                SELECT *
+                                FROM "ChiTieu"
+                                WHERE "Ngay" = $1 AND "MaMonAn" = $2
+                              )
+                        `, [new Date(), monan.MaMonAn, monan.SoLuong]);
+                        if (data.length > 0) {
+                            return false;
+                        }
+                    } catch (error) {
+                        console.error(error);
                     }
-                } catch (error) {
-                    console.error(error);
-                }
+                }               
             }
             return true;
         } catch (error) {
@@ -64,24 +69,24 @@ module.exports = {
         let dbcn = null;
         try {
             dbcn = await db.connect();
+
             for (const monan of listmonan) {
-                try {
-                    const data = await dbcn.any(`
-                        SELECT * FROM "ThucPham"
-                        WHERE  "MaThucPham" = $1 AND "SoLuongTrongKho" >= $2 AND $2!=0
-                    `, [monan.MaMonAn, monan.SoLuong]);
-                    console.log('monan.MaMonAn:', monan.MaMonAn);
-                    console.log('monan.SoLuong:', monan.SoLuong);
-                    console.log('data:', data);
-    
-                    if (data.length > 0) {
-                        return true;
+                if(monan.MaMonAn[0]!='C'){
+                    try {
+                        const data = await dbcn.any(`
+                            SELECT * FROM "ThucPham"
+                            WHERE  ("MaThucPham" = $1 AND "SoLuongTrongKho" < $2 ) 
+                        `, [monan.MaMonAn, monan.SoLuong]);
+            
+                        if (data.length > 0) {
+                            return false;
+                        }
+                    } catch (error) {
+                        console.error(error);
                     }
-                } catch (error) {
-                    console.error(error);
                 }
             }
-            return false;
+            return true;
         } catch (error) {
             throw error;
         } finally {
@@ -135,22 +140,6 @@ module.exports = {
         let dbcn = null;
         try {
             dbcn = await db.connect();
-            //     const data = await dbcn.any(`SELECT
-            //                                     "MonAn"."MaMonAn",
-            //                                     "MonAn"."TenMonAn",
-            //                                     "MonAn"."GiaBan",
-            //                                     SUM("BanHang"."SoLuong") AS "SoLuongBan",
-            //                                     SUM("BanHang"."SoLuong" * "MonAn"."GiaBan") AS "TongThanhTien"
-            //                                 FROM
-            //                                     "BanHang"
-            //                                 JOIN
-            //                                     "MonAn" ON "BanHang"."MaMonAn" = "MonAn"."MaMonAn"
-            //                                 WHERE
-            //                                     "BanHang"."NgayBan" = $1
-            //                                 GROUP BY
-            //                                     "MonAn"."MaMonAn", "MonAn"."TenMonAn", "MonAn"."GiaBan";
-            //  `,[Date]);
-            //     return data.map(dbDoanhThu => new DoanhThu(dbDoanhThu));
             let query = `
             SELECT
                 "MonAn"."MaMonAn",
@@ -199,6 +188,36 @@ module.exports = {
             await db.query(updateQuery, updateValues);
         }
         return insertResult[0].MaNhapHang;
+    },
+    updateThucPham:async (listmonan)=>{
+        for (const monan of listmonan) {
+            if(monan.MaMonAn[0]!='C'){
+                try {
+                    const data = await db.any(`
+                        UPDATE  "ThucPham" SET "SoLuongTrongKho"="SoLuongTrongKho"-$2
+                        WHERE  "MaThucPham" = $1 
+                    `, [monan.MaMonAn, monan.SoLuong]);
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+        }
+
+    },
+    updateChiTieu:async (listmonan)=>{
+        for (const monan of listmonan) {
+            if(monan.MaMonAn[0]=='C'){
+                try {
+                    const data = await db.any(`
+                        UPDATE  "ChiTieu" SET "SoLuong"="SoLuong"-$2
+                        WHERE  "MaMonAn" = $1 AND "Ngay"=$3
+                    `, [monan.MaMonAn, monan.SoLuong,new Date()]);
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+        }
+
     },
     removeThucPham: async (MaThucPham, SoLuong) => {
         const updateQuery = `UPDATE "ThucPham" SET "SoLuongTrongKho" = "SoLuongTrongKho" - $1 WHERE "MaThucPham" = $2`;

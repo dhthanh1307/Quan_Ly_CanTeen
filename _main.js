@@ -369,6 +369,9 @@ export default {
         },
         async resetPortionCheck() {
             this.isPortionSet = false;
+        },
+        async logOut(){
+            window.location.href='/';
         }
     },
     async beforeMount() {
@@ -378,7 +381,9 @@ export default {
         `<div class="container" v-if="login">
 
             <div class="row mt-4">
-                <vcnav @change-page="changePage" @change-menu="changeToMenu" @change-import="changeToImport"  @change-staff="changeToStaff" @change-serving="changeToServing"/>
+                <vcnav @change-page="changePage" @change-menu="changeToMenu" @change-import="changeToImport" 
+                 @change-staff="changeToStaff" @change-serving="changeToServing"
+                 @logOut="logOut" />
             </div>
 
             <vcinfo v-if="comName=='vccontent'"/>
