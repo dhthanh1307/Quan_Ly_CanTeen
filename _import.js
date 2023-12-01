@@ -14,9 +14,14 @@ export default{
                 $('#ID-input-i').val("");
                 $('#Name-input-i').val("");
                 $('#Unit-input-i').val("");
+                $('#Quantity-input-i').val("");
+                $('#Price-input-i').val("");
+                $('#totalTax').text("0đ");
+                $('#totalPrice').text("0đ");
                 $('#ID-input-e').val("");
                 $('#Name-input-e').val("");
                 $('#Unit-input-e').val("");
+                $('#Quantity-input-e').val("");
             }
             else {
                 this.selectedId = id;
@@ -24,9 +29,14 @@ export default{
                 $('#ID-input-i').val(id);
                 $('#Name-input-i').val(name);
                 $('#Unit-input-i').val(unit);
+                $('#Quantity-input-i').val("");
+                $('#Price-input-i').val("");
+                $('#totalTax').text("0đ");
+                $('#totalPrice').text("0đ");
                 $('#ID-input-e').val(id);
                 $('#Name-input-e').val(name);
                 $('#Unit-input-e').val(unit);
+                $('#Quantity-input-e').val("");
             }
         },
         updateTotal() {
@@ -64,8 +74,8 @@ export default{
             <span class="navbar-brand fs-1 fw-bold user-select-none">Quản lý kho hàng</span>
         </nav>
         <div class="row d-flex flex-row col-12 ms-4">
-            <div class="d-flex flex-column col-7">
-                <div class="d-flex">
+            <div class="d-flex flex-column align-items-center col-7">
+                <div class="d-flex w-100">
                     <input id="inputKeyword" class="form-control me-2" placeholder="Tìm kiếm">
                     <button class="btn btn-outline-success w-25" @click="emitSearch">Tìm kiếm</button>
                 </div>

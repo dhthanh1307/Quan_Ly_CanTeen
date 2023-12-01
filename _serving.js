@@ -52,7 +52,7 @@ export default{
             </div>
             <div class="card text-bg-light m-4 menu-detail">
                 <div class="d-flex justify-content-center flex-column">
-                    <div class="fs-5 fw-bold text-center user-select-none">Thiết lập chỉ tiêu</div>
+                    <div class="fs-5 fw-bold mt-3 text-center user-select-none">Thiết lập chỉ tiêu</div>
                     <div class="fs-6 fw-bold user-select-none text-center">{{ this.currentDate }}</div>
                 </div>
                 <div class="d-flex flex-column">
