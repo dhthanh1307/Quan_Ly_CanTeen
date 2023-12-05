@@ -169,10 +169,30 @@ module.exports = {
         try {
             console.log('insert nhan su');
             const body = req.body;
-            await db.insertStaff(body.Username, body.Password, body.Admin);
+            await db.insertStaff(body.Username, body.Password, body.Admin,body.Name);
             res.json({});
         } catch (e) {
             next(e);
         }
-    }
+    },
+    insertGioLam:  async (req, res, next) => {
+        try {
+            console.log('insert gio lam');
+            const body = req.body;
+            await db.insertGioLam(body.Username, body.GioLam,body.Ngay);
+            res.json({});
+        } catch (e) {
+            next(e);
+        }
+    },
+    getGiolam:async (req, res, next) => {
+        try {
+            console.log('thong ke gio lam ');
+            const body = req.body;
+            const result = await db.getLamViec();
+            res.json(result);
+        } catch (err) {
+            next(err);
+        }
+    },
 }

@@ -146,7 +146,9 @@ export default {
         return {
 
             login: false,
+            Username:'',
             isAdmin: false,
+            timelogin:null,
 
             comName: 'vccontent',
             loading: false,
@@ -155,7 +157,8 @@ export default {
             DoanhThu:[],
             NhanSu:[],
             ChiTieu:[],
-            isPortionSet: false
+            isPortionSet: false,
+            LamViec:[],
         }
     },
     components: {
@@ -167,6 +170,7 @@ export default {
             ListThucPham: computed(() => this.ListThucPham),
             DoanhThu: computed(()=> this.DoanhThu),
             NhanSu: computed(()=> this.NhanSu),
+            LamViec: computed(()=> this.LamViec),
             isPortionSet: computed(() => this.isPortionSet)
         }
     },
@@ -176,6 +180,8 @@ export default {
             if (res.result) {
                 this.login = true;
                 this.isAdmin = isAdmin;
+                this.Username=username;
+                this.timelogin=new Date();
             }
             else {
                 this.showToast();
@@ -325,10 +331,10 @@ export default {
                 console.log(error);
             }
         },
-        async insertStaff(name,pw,admin){
+        async insertStaff(uname,pw,admin,name){
             try {
                 const url=`http://localhost:3000/insertStaff`;
-                const res = await fetchPost(url,{Username:name,Password:pw,Admin:admin});
+                const res = await fetchPost(url,{Username:uname,Password:pw,Admin:admin,Name:name});
                 await this.loadStaff();
             } catch (error) {
                 console.log(error);
@@ -371,7 +377,18 @@ export default {
             this.isPortionSet = false;
         },
         async logOut(){
+            if(this.isAdmin!=true){
+                const giolam=(new Date() - this.timelogin) / (1000 * 60 * 60);            
+                const url=`http://localhost:3000/insertGioLam`;
+                const res = await fetchPost(url,{Username:this.Username,GioLam:giolam,Ngay:new Date()});
+            }
+          
             window.location.href='/';
+        },
+        async thongkegiolam(){
+            const url=`http://localhost:3000/giolam`;
+            const res = await fetchGet(url);
+            this.LamViec=res;
         }
     },
     async beforeMount() {
@@ -395,6 +412,7 @@ export default {
                 @update-item="updateItem" @insert-thuc-pham="insertThucPham" 
                 @remove-thuc-pham="removeThucPham" @search-thuc-pham="searchThucPham" 
                 @set-portion="setPortion" @check-portion-set="checkPortionSet" 
+                @thongkegiolam="thongkegiolam"
                 @reset-portion-check="resetPortionCheck" :is="comName"/>
                 <component v-else :is="comName"/>                                   
             </div>

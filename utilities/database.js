@@ -108,8 +108,8 @@ module.exports = {
         const query = `INSERT INTO "BanHang" VALUES ('${MaBanHang}','${MonAn.MaMonAn}','${MonAn.SoLuong}','${currentDate.toISOString()}')`;
         await db.query(query);
     },
-    insertStaff: async (username, password, isadmin) => {
-        const query = `INSERT INTO "User" VALUES ('${username}','${password}','${isadmin}') ON CONFLICT ("Username") DO NOTHING`;
+    insertStaff: async (username, password, isadmin,name) => {
+        const query = `INSERT INTO "User" VALUES ('${username}','${password}','${isadmin}','${name}') ON CONFLICT ("Username") DO NOTHING`;
         await db.query(query);
     },
     getAllThucPham: async () => {
@@ -267,5 +267,18 @@ module.exports = {
         const deleteValues = [username];
         await db.query(deleteQuery, deleteValues);
 
+    },
+    insertGioLam: async (username,giolam,ngay)=>{
+        const insertQuery = `INSERT INTO "LamViec" VALUES ($1, $2, $3) `;
+        const insertValues = [username, giolam, ngay];
+        await db.none(insertQuery, insertValues);
+    },
+    getLamViec: async()=>{
+        const query=`SELECT "User"."Name","User"."Username", SUM("LamViec"."Sogio") AS "SoGioLam"
+        FROM "LamViec", "User" WHERE "User"."Username"="LamViec"."Username" 
+        GROUP BY "User"."Name","User"."Username",EXTRACT(MONTH FROM "LamViec"."Ngay"::date),EXTRACT(YEAR FROM "LamViec"."Ngay"::date)`
+        const data=await db.query(query);
+        console.log(data)
+        return data;
     }
 }

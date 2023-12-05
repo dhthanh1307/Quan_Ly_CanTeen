@@ -18,6 +18,8 @@ router.post('/checkPortionSet', controller.checkPortionSet);
 router.post('/removeStaff', controller.removeStaff);
 router.post('/thongke', controller.thongke);
 router.get('/nhansu', controller.nhansu);
+router.get('/giolam', controller.getGiolam);
 router.post('/insertStaff', controller.insertStaff);
+router.post('/insertGioLam', controller.insertGioLam);
 
 module.exports = router;
