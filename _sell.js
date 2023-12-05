@@ -31,7 +31,7 @@ export default {
             this.$emit('thanhToan',result,this.ListMonAn,this.SoDienThoai,this.TichLuy,this.GiamGia);
             
             let display = result;
-            if (this.SoDienThoai != null) display = result * (1 - this.GiamGia)
+            if (this.SoDienThoai != null) display = result * (1 - this.GiamGia);
             $("#total").html(display.toString() + "đ");
         },
         createNew() {

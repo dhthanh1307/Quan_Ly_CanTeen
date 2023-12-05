@@ -253,7 +253,9 @@ export default {
         },
         async thanhtoan(result,ListEdit,SoDienThoai,TichLuy,GiamGia){
             const url = `http://localhost:3000/insertHoaDon`;
-            const json = await fetchPost(url, {PhuongThuc:`online`,SoTien:result,ListEdit:ListEdit});
+            let newResult = result;
+            if (this.SoDienThoai != null) newResult = result * (1 - this.GiamGia);
+            const json = await fetchPost(url, {PhuongThuc:`online`,SoTien:newResult,ListEdit:ListEdit});
             if(json.ktra===false){
                 alert('Số lượng sản phẩm trong kho không đủ');
             }
