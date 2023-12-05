@@ -127,6 +127,24 @@ async function fetchCheckPortionSet(id, currentDate) {
     return json;
 }
 
+async function fetchCreateKhachHang(SoDienThoai) {
+    const url = `http://localhost:3000/createKhachHang`;
+    const json = await fetchPost(url, { SoDienThoai: SoDienThoai });
+    return json;
+}
+
+async function fetchGetKhachHang(SoDienThoai) {
+    const url = `http://localhost:3000/getKhachHang`;
+    const json = await fetchPost(url, { SoDienThoai: SoDienThoai });
+    return json;
+}
+
+async function fetchUpdateKhachHang(SoDienThoai, TichLuy, GiamGia, ThanhToan) {
+    const url = `http://localhost:3000/updateKhachHang`;
+    const json = await fetchPost(url, { SoDienThoai: SoDienThoai, TichLuy: TichLuy, GiamGia: GiamGia, ThanhToan: ThanhToan });
+    return json;
+}
+
 import { computed  ,watch,} from 'vue'
 import vclogin from './_login.js'
 import vcnav from './_nav.js'
@@ -159,6 +177,10 @@ export default {
             ChiTieu:[],
             isPortionSet: false,
             LamViec:[],
+            SoDienThoai: null,
+            TichLuy: 0,
+            GiamGia: 0,
+            isValidKhachHang: false
         }
     },
     components: {
@@ -171,7 +193,10 @@ export default {
             DoanhThu: computed(()=> this.DoanhThu),
             NhanSu: computed(()=> this.NhanSu),
             LamViec: computed(()=> this.LamViec),
-            isPortionSet: computed(() => this.isPortionSet)
+            isPortionSet: computed(() => this.isPortionSet),
+            SoDienThoai: computed(() => this.SoDienThoai),
+            TichLuy: computed(() => this.TichLuy),
+            GiamGia: computed(() => this.GiamGia)
         }
     },
     methods: {
@@ -226,7 +251,7 @@ export default {
                 console.log(error);
             }
         },
-        async thanhtoan(result,ListEdit){
+        async thanhtoan(result,ListEdit,SoDienThoai,TichLuy,GiamGia){
             const url = `http://localhost:3000/insertHoaDon`;
             const json = await fetchPost(url, {PhuongThuc:`online`,SoTien:result,ListEdit:ListEdit});
             if(json.ktra===false){
@@ -234,6 +259,9 @@ export default {
             }
             else{
                 alert('Thanh toán thành công');
+            }
+            if (this.SoDienThoai != null) {
+                await fetchUpdateKhachHang(SoDienThoai, TichLuy, GiamGia, result);
             }
             return json;
         },
@@ -389,6 +417,42 @@ export default {
             const url=`http://localhost:3000/giolam`;
             const res = await fetchGet(url);
             this.LamViec=res;
+        },
+        async createKhachHang(SoDienThoai) {
+            try {
+                const res = await fetchCreateKhachHang(SoDienThoai);
+                if (res == false) {
+                    alert('Khách hàng đã tồn tại!');
+                }
+                else {
+                    alert('Tạo mới thành công!');
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        async getKhachHang(SoDienThoai) {
+            try {
+                const res = await fetchGetKhachHang(SoDienThoai);
+                if (res != null) {
+                    this.SoDienThoai = SoDienThoai;
+                    this.TichLuy = res.TichLuy;
+                    this.GiamGia = res.GiamGia;
+                    this.isValidKhachHang = true;
+                    //console.log(this.SoDienThoai + ", TichLuy: " + this.TichLuy + ", GiamGia: " + this.GiamGia);
+                }
+                else {
+                    this.resetKhachHang();
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        resetKhachHang() {
+            this.SoDienThoai = null;
+            this.TichLuy = 0;
+            this.GiamGia = 0;
+            this.isValidKhachHang = false;
         }
     },
     async beforeMount() {
@@ -411,9 +475,10 @@ export default {
                 @change-menu="changeToMenu" @change-import="changeToImport" 
                 @update-item="updateItem" @insert-thuc-pham="insertThucPham" 
                 @remove-thuc-pham="removeThucPham" @search-thuc-pham="searchThucPham" 
-                @set-portion="setPortion" @check-portion-set="checkPortionSet" 
+                @set-portion="setPortion" @check-portion-set="checkPortionSet"
+                @get-khach-hang="getKhachHang" @reset-khach-hang="resetKhachHang"
                 @thongkegiolam="thongkegiolam"
-                @reset-portion-check="resetPortionCheck" :is="comName"/>
+                @create-khach-hang="createKhachHang" @reset-portion-check="resetPortionCheck" :is="comName"/>
                 <component v-else :is="comName"/>                                   
             </div>
 

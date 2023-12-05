@@ -30,8 +30,14 @@ class NhanSu{
         this.Username=temp.Username;
         this.Password=temp.Password;
         this.isAdmin=temp.isAdmin;
-    
+    }
+};
+class KhachHang {
+    constructor(rawKhachHang) {
+        this.SoDienThoai = rawKhachHang.SoDienThoai;
+        this.TichLuy = rawKhachHang.TichLuy;
+        this.GiamGia = rawKhachHang.GiamGia;
     }
 };
 
-module.exports = { MonAn, ThucPham,DoanhThu ,NhanSu};
+module.exports = { MonAn, ThucPham,DoanhThu ,NhanSu, KhachHang};
