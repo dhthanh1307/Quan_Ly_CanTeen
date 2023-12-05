@@ -18,7 +18,7 @@ export default{
             <button @click="$emit('changeServing')" type="button" class="btn btn-success me-4">Chỉ tiêu</button>
             <button @click="$emit('changePage', 'vcsell')" type="button" class="btn btn-success me-4">Bán hàng</button>
             <button @click="$emit('changeStaff')" type="button" class="btn btn-success me-4">Nhân sự</button>
-            <button @click="$emit('logOut')" type="button" class="btn btn-success me-4">Đăng xuất</button>
+            <button @click="$emit('logOut')" type="button" class="btn btn-danger me-4">Đăng xuất</button>
             </form>
         </div>
     </nav>

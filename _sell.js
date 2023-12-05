@@ -1,8 +1,9 @@
 export default {
-    inject:['ListMonAn'],
+    inject:['ListMonAn', 'SoDienThoai', 'TichLuy', 'GiamGia'],
     data() {
         return {
             selectedId: null,
+            selectedOption: 'KhongLayGiamGia'
         }
     },
     methods: {
@@ -21,19 +22,29 @@ export default {
             
         },
         calTotal() {
-            
             let result = 0;
             for (let i = 0; i < this.ListMonAn.length; i++) {
                 if (!isNaN(this.ListMonAn[i].SoLuong ) && !isNaN(this.ListMonAn[i].GiaBan)) {
                     result = result + this.ListMonAn[i].SoLuong * this.ListMonAn[i].GiaBan;
                 }
-                
             }
-            this.$emit('thanhToan',result,this.ListMonAn);
+            this.$emit('thanhToan',result,this.ListMonAn,this.SoDienThoai,this.TichLuy,this.GiamGia);
             
-            $("#total").html(result.toString() + "đ");
+            let display = result;
+            if (this.SoDienThoai != null) display = result * (1 - this.GiamGia)
+            $("#total").html(display.toString() + "đ");
+        },
+        createNew() {
+            this.$emit('createKhachHang', $('#SDT-input').val());
+        },
+        radioChecked() {
+            if (this.selectedOption == "LayGiamGia") {
+                this.$emit('getKhachHang', $('#SDT-input').val());
+            }
+            else {
+                this.$emit('resetKhachHang');
+            }
         }
-
 
     },
     template: `
@@ -84,7 +95,29 @@ export default {
                             </div>
                         </template>
                     </p>
-                    <p>Thuế</p>
+                    <div class="d-flex flex-column flex-nowrap">
+                        <div class="d-flex flex-row flex-nowrap justify-content-center">
+                            <div class="input-group input-group w-75 mb-2 me-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">SĐT</span>
+                                <input @input="radioChecked()" id="SDT-input" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                            </div>
+                            <button @click="createNew" style="height: fit-content;" type="button" class="btn btn-success">Tạo</button>
+                        </div>
+                        <div class="d-flex flex-row flex-nowrap justify-content-between">
+                            <div class="form-check">
+                                <input @change="radioChecked" class="form-check-input" type="radio" name="KhachHangRadio" id="LayGiamGia" value="LayGiamGia" v-model="selectedOption">
+                                <label class="form-check-label" for="LayGiamGia">
+                                    Lấy giảm giá
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input @change="radioChecked" class="form-check-input" type="radio" name="KhachHangRadio" id="KhongLayGiamGia" value="KhongLayGiamGia" v-model="selectedOption" checked>
+                                <label class="form-check-label" for="KhongLayGiamGia">
+                                    Không lấy giảm giá
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                     <p  class="row d-flex">
                         <div class="col-6">Tổng</div>
                         <div id="total" class="col-6 text-end">0</div>

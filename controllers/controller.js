@@ -99,7 +99,6 @@ module.exports = {
         }
         catch (err) {
             next(err);
-
         }
     },
     searchThucPham: async (req, res, next) => {
@@ -174,5 +173,50 @@ module.exports = {
         } catch (e) {
             next(e);
         }
-    }
+    },
+    insertKhachHang: async (req, res, next) => {
+        try {
+            const body = req.body;
+            const result = await db.insertKhachHang(body.SoDienThoai);
+            res.json(result);
+        }
+        catch(e){
+            console.log(e);
+        }
+    },
+    getKhachHang: async (req, res, next) => {
+        try {
+            const body = req.body;
+            const data = await db.getKhachHang(body.SoDienThoai);
+            res.json(data);
+        }
+        catch(e){
+            console.log(e);
+        }
+    },
+    updateKhachHang: async (req, res, next) => {
+        try {
+            const body = req.body;
+            const data = await db.getKhachHang(body.SoDienThoai);
+            const newTichLuy = data.TichLuy + body.ThanhToan;
+            let newGiamGia = 0;
+            if (newTichLuy < 100000) {
+                newGiamGia = 0;
+            }
+            else if (newTichLuy >= 100000 && newTichLuy < 300000) {
+                newGiamGia = 0.03;
+            }
+            else if (newTichLuy >= 300000 && newTichLuy < 500000) {
+                newGiamGia = 0.05;
+            }
+            else if (newTichLuy >= 500000 && newTichLuy < 1000000) {
+                newGiamGia = 0.05;
+            }
+            else newGiamGia = 1;
+            await db.updateKhachHang(body.SoDienThoai, newTichLuy, newGiamGia);
+        }
+        catch(e){
+            console.log(e);
+        }
+    },
 }

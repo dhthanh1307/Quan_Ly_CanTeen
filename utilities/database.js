@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { MonAn, ThucPham, DoanhThu, NhanSu } = require('./general');
+const { MonAn, ThucPham, DoanhThu, NhanSu, KhachHang } = require('./general');
 const pgp = require('pg-promise')({
     capSQL: true
 });
@@ -266,6 +266,32 @@ module.exports = {
         const deleteQuery = `DELETE FROM "User" WHERE "Username" = $1 RETURNING *`;
         const deleteValues = [username];
         await db.query(deleteQuery, deleteValues);
+    },
+    insertKhachHang: async (SoDienThoai) => {
+        const checkQuery = `SELECT "SoDienThoai" FROM "KhachHang" WHERE "SoDienThoai" = $1`;
+        const checkValues = [SoDienThoai];
+        const checkResult = await db.query(checkQuery, checkValues);
+      
+        if (checkResult.length > 0) {
+          return false;
+        }
+        else {
+          const insertQuery = `INSERT INTO "KhachHang" ("SoDienThoai") VALUES ($1)`;
+          const insertValues = [SoDienThoai];
+          await db.query(insertQuery, insertValues);
+          return true;
+        }
+    },
+    getKhachHang: async (SoDienThoai) => {
+        const query = `SELECT * FROM "KhachHang" WHERE "SoDienThoai" = $1`;
+        const values = [SoDienThoai];
+        const result = await db.query(query, values);
 
-    }
+        return result.length > 0 ? result[0] : null;
+    },
+    updateKhachHang: async (SoDienThoai, newTichLuy, newGiamGia) => {
+        const updateQuery = `UPDATE "KhachHang" SET "TichLuy" = $1, "GiamGia" = $2 WHERE "SoDienThoai" = $3`;
+        const updateValues = [newTichLuy, newGiamGia, SoDienThoai];
+        await db.query(updateQuery, updateValues);
+    },
 }
