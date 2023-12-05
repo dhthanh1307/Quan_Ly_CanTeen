@@ -267,27 +267,6 @@ module.exports = {
         const deleteValues = [username];
         await db.query(deleteQuery, deleteValues);
     },
-    insertKhachHang: async (SoDienThoai) => {
-        const checkQuery = `SELECT "SoDienThoai" FROM "KhachHang" WHERE "SoDienThoai" = $1`;
-        const checkValues = [SoDienThoai];
-        const checkResult = await db.query(checkQuery, checkValues);
-      
-        if (checkResult.length > 0) {
-          return false;
-        }
-        else {
-          const insertQuery = `INSERT INTO "KhachHang" ("SoDienThoai") VALUES ($1)`;
-          const insertValues = [SoDienThoai];
-          await db.query(insertQuery, insertValues);
-          return true;
-        }
-    },
-    getKhachHang: async (SoDienThoai) => {
-        const query = `SELECT * FROM "KhachHang" WHERE "SoDienThoai" = $1`;
-        const values = [SoDienThoai];
-        const result = await db.query(query, values);
-
-    },
     insertGioLam: async (username,giolam,ngay)=>{
         const insertQuery = `INSERT INTO "LamViec" VALUES ($1, $2, $3) `;
         const insertValues = [username, giolam, ngay];
@@ -328,5 +307,4 @@ module.exports = {
         const updateValues = [newTichLuy, newGiamGia, SoDienThoai];
         await db.query(updateQuery, updateValues);
     },
-
 }

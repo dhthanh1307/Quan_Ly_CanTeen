@@ -453,6 +453,7 @@ export default {
             this.TichLuy = 0;
             this.GiamGia = 0;
             this.isValidKhachHang = false;
+            //console.log(this.SoDienThoai + ", TichLuy: " + this.TichLuy + ", GiamGia: " + this.GiamGia);
         }
     },
     async beforeMount() {
