@@ -33,22 +33,32 @@ export default{
         </nav>
         <div class="row d-flex flex-row col-12 ms-4">
             <div class="d-flex flex-column col-8">
-                <div class="card text-bg-success m-4 menu-display">
+                <div class="card text-bg-success m-4 menu-display" style="height:720px">
                     <div class="card-body d-flex flex-row flex-wrap overflow-hidden overflow-y-auto gap-2 ms-2">
                         <template v-for="food in ListMonAn">
-                            <div v-if="food.MaMonAn[0] == 'C'" :id="food.MaMonAn" @click="chooseItem(food.MaMonAn, food.TenMonAn, food.GiaBan)" :class="{ 'chosen-item': selectedId === food.MaMonAn }" class="card text-bg-light menu-item d-flex flex-column justify-content-evenly text-center">
-                                <span class="fs-6 fw-bold user-select-none">{{ food.TenMonAn }}</span>
-                                <span class="fs-6 fw-bold user-select-none">{{ food.GiaBan }}đ</span>
+                            <div v-if="food.MaMonAn[0] == 'C'" :id="food.MaMonAn" @click="chooseItem(food.MaMonAn, food.TenMonAn, food.GiaBan)"
+                            :class="{ 'chosen-item': selectedId === food.MaMonAn }"
+                            class="card text-bg-light" style="width:238px">
+                                <iframe :src="food.HinhAnh" class="card-img-top mt-2" alt="..." style="width:235px;height:250px"></iframe>                                                      
+                                <div class="card-body  d-flex flex-column justify-content-evenly text-center">
+                                    <span class="fs-6 fw-bold user-select-none">{{ food.TenMonAn }}</span>
+                                    <span class="fs-6 fw-bold user-select-none">{{ food.GiaBan }}đ</span>
+                                </div>
                             </div>
                         </template>
                     </div>
                 </div>
-                <div class="card text-bg-success m-4 menu-display">
+                <div class="card text-bg-success m-4 menu-display" style="height:720px">
                     <div class="card-body d-flex flex-row flex-wrap overflow-hidden overflow-y-auto gap-2 ms-2">
                         <template v-for="food in ListMonAn">
-                            <div v-if="food.MaMonAn[0] != 'C'" :id="food.MaMonAn" @click="chooseItem(food.MaMonAn, food.TenMonAn, food.GiaBan)" :class="{ 'chosen-item': selectedId === food.MaMonAn }" class="card text-bg-light menu-item d-flex flex-column justify-content-evenly text-center">
-                                <span class="fs-6 fw-bold user-select-none">{{ food.TenMonAn }}</span>
-                                <span class="fs-6 fw-bold user-select-none">{{ food.GiaBan }}đ</span>
+                            <div v-if="food.MaMonAn[0] != 'C'" :id="food.MaMonAn" @click="chooseItem(food.MaMonAn, food.TenMonAn, food.GiaBan)" 
+                            :class="{ 'chosen-item': selectedId === food.MaMonAn }" 
+                            class="card text-bg-light" style="width:238px">
+                                <iframe :src="food.HinhAnh" class="card-img-top mt-2" alt="..." style="width:235px;height:250px"></iframe>                                                      
+                                <div class="card-body  d-flex flex-column justify-content-evenly text-center">
+                                    <span class="fs-6 fw-bold user-select-none">{{ food.TenMonAn }}</span>
+                                    <span class="fs-6 fw-bold user-select-none">{{ food.GiaBan }}đ</span>
+                                </div>
                             </div>
                         </template>
                     </div>
