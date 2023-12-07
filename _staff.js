@@ -113,6 +113,8 @@ export default{
                     <th scope="col-4">User name</th>
                     <th scope="col-4">Họ tên</th>
                     <th scope="col-2">Tổng số giờ làm việc</th>
+                    <th scope="col-2">Tháng</th>
+                    <th scope="col-2">Năm</th>
                 </thead>
                 <tbody>
                     <tr v-for="(item,index) in LamViec" :key="item.Name">
@@ -120,6 +122,8 @@ export default{
                         <td>{{ item.Name }}</td>
                         <td>{{ item.Username}}</td>
                         <td>{{ item.SoGioLam }}</td>
+                        <td>{{ item.Thang }}</td>
+                        <td>{{ item.Nam }}</td>
                     </tr>
                 </tbody>
             </table>

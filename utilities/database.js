@@ -273,7 +273,7 @@ module.exports = {
         await db.none(insertQuery, insertValues);
     },
     getLamViec: async()=>{
-        const query=`SELECT "User"."Name","User"."Username", SUM("LamViec"."Sogio") AS "SoGioLam"
+        const query=`SELECT "User"."Name","User"."Username", SUM("LamViec"."Sogio") AS "SoGioLam", EXTRACT(MONTH FROM "LamViec"."Ngay"::date) AS "Thang",EXTRACT(YEAR FROM "LamViec"."Ngay"::date) AS "Nam"
         FROM "LamViec", "User" WHERE "User"."Username"="LamViec"."Username" 
         GROUP BY "User"."Name","User"."Username",EXTRACT(MONTH FROM "LamViec"."Ngay"::date),EXTRACT(YEAR FROM "LamViec"."Ngay"::date)`
         const data=await db.query(query);
