@@ -2,8 +2,17 @@ export default {
     inject:['ListMonAn', 'SoDienThoai', 'TichLuy', 'GiamGia'],
     data() {
         return {
-            selectedId: null,
-            selectedOption: 'KhongLayGiamGia'
+            selectedId: null
+        }
+    },
+    watch: {
+        SoDienThoai: function(newValue, oldValue) {
+            if (newValue == null) {
+                $('#currentDiscount').css("display", "none")
+            }
+            else {
+                $('#currentDiscount').css("display", "block")
+            }
         }
     },
     methods: {
@@ -37,14 +46,12 @@ export default {
         createNew() {
             this.$emit('createKhachHang', $('#SDT-input').val());
         },
-        radioChecked() {
-            if (this.selectedOption == "LayGiamGia") {
-                this.$emit('getKhachHang', $('#SDT-input').val());
-            }
-            else {
-                this.$emit('resetKhachHang');
-            }
+        checkSDT() {
+            this.$emit('getKhachHang', $('#SDT-input').val());
         }
+
+    },
+    beforeMount() {
 
     },
     template: `
@@ -115,38 +122,25 @@ export default {
                             </div>
                         </template>
                     </p>
-                    <div class="d-flex flex-column flex-nowrap">
-                        <div class="d-flex flex-row flex-nowrap justify-content-center">
-                            <div class="input-group input-group w-75 mb-2 me-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">SĐT</span>
-                                <input @input="radioChecked()" id="SDT-input" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                            </div>
-                            <button @click="createNew" style="height: fit-content;" type="button" class="btn btn-success">Tạo</button>
-                        </div>
-                        <div class="d-flex flex-row flex-nowrap justify-content-between">
-                            <div class="form-check">
-                                <input @change="radioChecked" class="form-check-input" type="radio" name="KhachHangRadio" id="LayGiamGia" value="LayGiamGia" v-model="selectedOption">
-                                <label class="form-check-label" for="LayGiamGia">
-                                    Lấy giảm giá
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input @change="radioChecked" class="form-check-input" type="radio" name="KhachHangRadio" id="KhongLayGiamGia" value="KhongLayGiamGia" v-model="selectedOption" checked>
-                                <label class="form-check-label" for="KhongLayGiamGia">
-                                    Không lấy giảm giá
-                                </label>
-                            </div>
-                        </div>
-                    </div>
                     <p  class="row d-flex">
                         <div class="col-6">Tổng</div>
                         <div id="total" class="col-6 text-end">0</div>
                     </p>
+                    <div class="d-flex flex-column flex-nowrap mb-2">
+                        <div class="d-flex flex-row flex-nowrap justify-content-center">
+                            <div class="input-group input-group w-75 mb-2 me-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">SĐT</span>
+                                <input @input="checkSDT()" id="SDT-input" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                            </div>
+                            <button @click="createNew" style="height: fit-content;" type="button" class="btn btn-success">Tạo</button>
+                        </div>
+                        <span id="currentDiscount" class="text-center text-secondary fs-6" style="display: none;">Mức giảm giá hiện tại: {{ this.GiamGia * 100 }}%</span>
+                    </div>
                     <div class="d-flex justify-content-end w-100">
-                        <button @click="calTotal()"  type="button" class="btn btn-success w-100">Thanh toán </button>
+                        <button @click="calTotal()" type="button" class="btn btn-success w-100">Thanh toán </button>
                     </div>
             </div>
-            <div class="row text-center fw-bold"  style="font-family:'Newsreader', serif">
+            <div class="row text-center fw-bold" style="font-family:'Newsreader', serif">
                 <div class="col-4">
                     <img class="m-3" src="./images/sell1.png" alt="" width="370" height="395">
                     <h3>Chất lượng</h3>

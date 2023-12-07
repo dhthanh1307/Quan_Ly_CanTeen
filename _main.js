@@ -428,6 +428,7 @@ export default {
                 }
                 else {
                     alert('Tạo mới thành công!');
+                    this.getKhachHang(SoDienThoai);
                 }
             } catch (error) {
                 console.log(error);
@@ -457,9 +458,6 @@ export default {
             this.isValidKhachHang = false;
             //console.log(this.SoDienThoai + ", TichLuy: " + this.TichLuy + ", GiamGia: " + this.GiamGia);
         }
-    },
-    async beforeMount() {
-
     },
     template:
         `<div class="container" v-if="login">
