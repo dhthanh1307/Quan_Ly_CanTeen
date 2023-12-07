@@ -2,7 +2,10 @@ export default {
     inject:['ListMonAn', 'SoDienThoai', 'TichLuy', 'GiamGia'],
     data() {
         return {
-            selectedId: null
+            selectedId: null,
+            isHovered:false,
+            hoveredImage:null,
+
         }
     },
     watch: {
@@ -14,6 +17,16 @@ export default {
                 $('#currentDiscount').css("display", "block")
             }
         }
+    },
+    computed: {
+        imageStyle() {
+            return {
+                transform: this.isHovered ? 'scale(1.1)' : 'scale(1)',
+                transition: 'transform 0.3s',
+                zIndex: this.isHovered ? 1 : 0,
+            };
+        },
+
     },
     methods: {
         chooseItem(goods) {
@@ -48,6 +61,14 @@ export default {
         },
         checkSDT() {
             this.$emit('getKhachHang', $('#SDT-input').val());
+        },
+        hover(image) {
+            this.isHovered = true;
+            this.hoveredImage = image;
+        },
+        unhover() {
+            this.isHovered = false;
+            this.hoveredImage = null;
         }
 
     },
@@ -76,11 +97,14 @@ export default {
             <div class="d-flex flex-column col-8">
                 <div class="card text-bg-success m-4 menu-display " style="height:700px">
                     <div class="card-body d-flex flex-row flex-wrap overflow-hidden overflow-y-auto gap-2 ms-2">
-                        <template v-for="food in ListMonAn">
+                        <template v-for="(food,i) in ListMonAn">
                             <div v-if="food.MaMonAn[0] == 'C'" :id="food.MaMonAn" @click="chooseItem(food)" @contextmenu.prevent="removeItem(food)"
                             :class="{ 'chosen-item': selectedId === food.MaMonAn }" 
                             class="card text-bg-light" style="width:238px">
-                                <iframe :src="food.HinhAnh" class="card-img-top mt-2" alt="..." style="width:235px;height:250px"></iframe>                                                      
+                                <img v-bind:src="food.HinhAnh" class="card-img-top mt-2" alt="..." style="width:235px;height:250px" 
+                                @mouseover="hover(ListMonAn[i])"
+                                @mouseout="unhover"
+                                :style="hoveredImage === ListMonAn[i] ? imageStyle : {}">                                                    
                                 <div class="card-body  d-flex flex-column justify-content-evenly text-center">
                                     <span class="fs-6 fw-bold user-select-none">{{ food.TenMonAn }}</span>
                                     <span class="fs-6 fw-bold user-select-none">{{ food.GiaBan }}đ</span>
@@ -96,7 +120,10 @@ export default {
                             <div v-if="drink.MaMonAn[0] != 'C'" :id="drink.MaMonAn" @click="chooseItem(drink)" @contextmenu.prevent="removeItem(drink)" 
                             :class="{ 'chosen-item': selectedId === drink.MaMonAn }" 
                             class="card text-bg-light" style="width:238px">
-                                <iframe :src="drink.HinhAnh" class="card-img-top mt-2" alt="..." style="width:235px;height:250px"></iframe>                                                      
+                                <img v-bind:src="drink.HinhAnh" class="card-img-top mt-2" alt="..." style="width:235px;height:250px"
+                                @mouseover="hover(drink)"
+                                @mouseout="unhover"
+                                :style="hoveredImage === drink ? imageStyle : {}">                                                    
                                 <div class="card-body  d-flex flex-column justify-content-evenly text-center">
                                     <span class="fs-6 fw-bold user-select-none">{{ drink.TenMonAn }}</span>
                                     <span class="fs-6 fw-bold user-select-none">{{ drink.GiaBan }}đ</span>

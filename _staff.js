@@ -7,7 +7,7 @@ export default{
             name:'',
             pw1:'',
             pw2:'',
-
+            create:1,
             admin:false,
         }
     },
@@ -43,6 +43,9 @@ export default{
                 }
             }
         },
+        createStaff(){
+            this.create=this.create*-1;
+        }
     },
     template:
     `
@@ -70,12 +73,20 @@ export default{
                         </template>
                     </div>
                 </div>
-                <div class="text-center">
+                <div class="row d-flex pb-5">
+                <div class="text-center col-4">
                     <button type="button"  @click="removeStaff" class="btn btn-success ">Xóa tài khoản</button>
+                </div>
+                <div class="text-center ms-3 col-3">
+                    <button type="button"  @click="createStaff" class="btn btn-success ">Tạo tài khoản</button>
+                </div>
+                <div class="text-center  ms-3 col-3" >
+                    <button type="button" class="btn btn-success " @click="$emit('thongkegiolam')">Thống kê giờ làm</button>
+                </div>
                 </div>
             </div>
 
-            <div class="card text-bg-light m-4 menu-detail" style="height:600px">
+            <div class="card text-bg-light m-4 menu-detail" v-if="this.create==-1" style="height:600px">
                 <h5 class="pt-5">Tên tài khoản</h5>
                 <input id="uname" v-model="uname" type="text" class="form-control" placeholder="Nhập tài khoản" aria-label="Username" aria-describedby="addon-wrapping">
                 <h5 class="pt-2">Họ tên</h5>
@@ -90,12 +101,10 @@ export default{
                             Admin
                         </label>
                 </div>
-                <div class="text-center" style="padding-top:100px">
+                <div class="text-center" style="padding-top:140px">
                     <button type="button" class="btn btn-success w-100" @click="insertStaff">Tạo tài khoản</button>
                 </div>
-                <div class="text-center" style="padding-top:10px">
-                    <button type="button" class="btn btn-success w-100" @click="$emit('thongkegiolam')">Thống kê giờ làm</button>
-                </div>
+               
             </div>
 
 

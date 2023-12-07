@@ -2,8 +2,20 @@ export default{
     inject: ['ListMonAn'],
     data(){
         return {
+            isHovered:false,
+            hoveredImage:null,
             selectedId: null
         }
+    },
+    computed: {
+        imageStyle() {
+            return {
+                transform: this.isHovered ? 'scale(1.1)' : 'scale(1)',
+                transition: 'transform 0.3s',
+                zIndex: this.isHovered ? 1 : 0,
+            };
+        },
+
     },
     methods: {
         chooseItem(id, name, price) {
@@ -24,6 +36,14 @@ export default{
             if (this.selectedId != null) {
                 this.$emit('updateItem', $('#ID-input').val(), $('#Name-input').val(), $('#Price-input').val());
             }
+        },
+        hover(image) {
+            this.isHovered = true;
+            this.hoveredImage = image;
+        },
+        unhover() {
+            this.isHovered = false;
+            this.hoveredImage = null;
         }
     },
     template:
@@ -39,7 +59,10 @@ export default{
                             <div v-if="food.MaMonAn[0] == 'C'" :id="food.MaMonAn" @click="chooseItem(food.MaMonAn, food.TenMonAn, food.GiaBan)"
                             :class="{ 'chosen-item': selectedId === food.MaMonAn }"
                             class="card text-bg-light" style="width:238px">
-                                <iframe :src="food.HinhAnh" class="card-img-top mt-2" alt="..." style="width:235px;height:250px"></iframe>                                                      
+                                <img :src="food.HinhAnh" class="card-img-top mt-2" alt="..." style="width:235px;height:250px"
+                                @mouseover="hover(food)"
+                                @mouseout="unhover"
+                                :style="hoveredImage === food ? imageStyle : {}">                                                    
                                 <div class="card-body  d-flex flex-column justify-content-evenly text-center">
                                     <span class="fs-6 fw-bold user-select-none">{{ food.TenMonAn }}</span>
                                     <span class="fs-6 fw-bold user-select-none">{{ food.GiaBan }}đ</span>
@@ -54,7 +77,10 @@ export default{
                             <div v-if="food.MaMonAn[0] != 'C'" :id="food.MaMonAn" @click="chooseItem(food.MaMonAn, food.TenMonAn, food.GiaBan)" 
                             :class="{ 'chosen-item': selectedId === food.MaMonAn }" 
                             class="card text-bg-light" style="width:238px">
-                                <iframe :src="food.HinhAnh" class="card-img-top mt-2" alt="..." style="width:235px;height:250px"></iframe>                                                      
+                                <img :src="food.HinhAnh" class="card-img-top mt-2" alt="..." style="width:235px;height:250px"
+                                @mouseover="hover(food)"
+                                @mouseout="unhover"
+                                :style="hoveredImage === food ? imageStyle : {}">                                                     
                                 <div class="card-body  d-flex flex-column justify-content-evenly text-center">
                                     <span class="fs-6 fw-bold user-select-none">{{ food.TenMonAn }}</span>
                                     <span class="fs-6 fw-bold user-select-none">{{ food.GiaBan }}đ</span>
