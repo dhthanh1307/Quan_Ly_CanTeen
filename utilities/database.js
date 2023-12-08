@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { MonAn, ThucPham, DoanhThu, NhanSu, KhachHang } = require('./general');
+
 const pgp = require('pg-promise')({
     capSQL: true
 });
@@ -28,7 +28,8 @@ module.exports = {
         try {
             dbcn = await db.connect();
             const data = await dbcn.any(`SELECT * FROM "MonAn" ORDER BY "MaMonAn" ASC`);
-            return data.map(dbMonAn => new MonAn(dbMonAn));
+            //return data.map(dbMonAn => new MonAn(dbMonAn));
+            return data;
         } catch (error) {
             throw error;
         } finally {
@@ -117,7 +118,8 @@ module.exports = {
         try {
             dbcn = await db.connect();
             const data = await dbcn.any(`SELECT * FROM "ThucPham" ORDER BY "MaThucPham" ASC`);
-            return data.map(dbThucPham => new ThucPham(dbThucPham));
+            //return data.map(dbThucPham => new ThucPham(dbThucPham));
+            return data;
         } catch (error) {
             throw error;
         } finally {
@@ -129,7 +131,8 @@ module.exports = {
         try {
             dbcn = await db.connect();
             const data = await dbcn.any(`SELECT * FROM "User" WHERE "isAdmin"=false`);
-            return data.map(dbNhanSu => new NhanSu(dbNhanSu));
+            //return data.map(dbNhanSu => new NhanSu(dbNhanSu));
+            return data;
         } catch (error) {
             throw error;
         } finally {
@@ -170,7 +173,8 @@ module.exports = {
         `;
 
             const data = await dbcn.any(query, [Date]);
-            return data.map(dbDoanhThu => new DoanhThu(dbDoanhThu));
+            //return data.map(dbDoanhThu => new DoanhThu(dbDoanhThu));
+            return data;
         } catch (error) {
             throw error;
         } finally {
@@ -229,14 +233,15 @@ module.exports = {
         try {
             dbcn = await db.connect();
             const data = await dbcn.any(`SELECT * FROM "ThucPham" WHERE "TenThucPham" ILIKE '%${Keyword}%' ORDER BY "MaThucPham" ASC`);
-            return data.map(dbThucPham => new ThucPham(dbThucPham));
+            //return data.map(dbThucPham => new ThucPham(dbThucPham));
+            return data;
         } catch (error) {
             throw error;
         } finally {
             dbcn.done();
         }
     },
-    themChiTieu: async (id, currentDate, portion) => {
+    nhapChiTieu: async (id, currentDate, portion) => {
         const checkQuery = `SELECT SUM(CT."SoLuongThucPham" * $1) <= SUM(TP."SoLuongTrongKho") AS check FROM "CongThuc" CT JOIN "ThucPham" TP ON CT."MaThucPham" = TP."MaThucPham" WHERE CT."MaMonAn" = $2 GROUP BY CT."MaMonAn"`;
         const checkValues = [portion, id];
         const checkResult = await db.any(checkQuery, checkValues);
