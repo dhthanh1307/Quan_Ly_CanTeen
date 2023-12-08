@@ -4,6 +4,10 @@ const ThucPham = require('../models/ThucPham');
 const ChiTieu = require('../models/ChiTieu');
 const DoanhThu = require('../models/DoanhThu');
 const KhachHang = require('../models/KhachHang');
+const HoaDon = require('../models/HoaDon');
+const LamViec = require('../models/LamViec');
+const BanHang = require('../models/BanHang');
+
 
 module.exports = {
     render: async (req, res, next) => {
@@ -60,10 +64,10 @@ module.exports = {
             if (chitieu && thucpham) {
                 ktra = true;
                 console.log('thanhtoan');
-                const mabanhang = await db.nhapHoaDon(body.PhuongThuc, body.SoTien);//TODO
+                const mabanhang = await HoaDon.nhapHoaDon(body.PhuongThuc, body.SoTien);//TODO
                 for (let i = 0; i < body.ListEdit.length; i++)
                     if (body.ListEdit[i].SoLuong > 0)
-                        await db.nhapBanHang(mabanhang, body.ListEdit[i]);//TODO
+                        await BanHang.nhapBanHang(mabanhang, body.ListEdit[i]);//TODO
                 ChiTieu.capNhatChiTieu(body.ListEdit);
                 ThucPham.capNhatThucPham(body.ListEdit);
             }
@@ -183,7 +187,7 @@ module.exports = {
         try {
             console.log('insert gio lam');
             const body = req.body;
-            await db.nhapGioLam(body.Username, body.GioLam,body.Ngay);//TODO
+            await LamViec.nhapGioLam(body.Username, body.GioLam,body.Ngay);//TODO
             res.json({});
         } catch (e) {
             next(e);
@@ -193,7 +197,7 @@ module.exports = {
         try {
             console.log('thong ke gio lam ');
             const body = req.body;
-            const result = await db.getLamViec();//TODO
+            const result = await LamViec.getLamViec();//TODO
             res.json(result);
         } catch (err) {
             next(err);
