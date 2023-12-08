@@ -56,7 +56,7 @@ module.exports = {
             console.log('check so luong');
             var ktra = false;
             const body = req.body;
-            const chitieu = await ChiTieu.checkChiTieu(body.ListEdit);
+            const chitieu = await ChiTieu.kiemTraSoLuongChiTieu(body.ListEdit);
             const thucpham = await ThucPham.kiemtraThucPham(body.ListEdit);
             console.log('thucpham: ', thucpham);
             console.log('chitieu: ', chitieu);
@@ -81,7 +81,7 @@ module.exports = {
     getAllGoods: async (req, res, next) => {
         try {
             console.log('all thuc pham');
-            const data = await ThucPham.getAllThucPham();
+            const data = await ThucPham.getThucPham();
             res.json(data);
         }
         catch (err) {
@@ -135,7 +135,7 @@ module.exports = {
     kiemtraChiTieu: async (req, res, next) => {
         try {
             const body = req.body;
-            const data = await ChiTieu.checkPortionSet(body.id, body.currentDate);
+            const data = await ChiTieu.kiemTraChiTieu(body.id, body.currentDate);
             res.json(data);
         }
         catch(e){

@@ -6,7 +6,7 @@ module.exports = class ChiTieu {
         this.Ngay = rawChiTieu.Ngay;
         this.SoLuong = rawChiTieu.SoLuong;
     }
-    static async checkChiTieu(ListEdit) {
+    static async kiemTraSoLuongChiTieu(ListEdit) {
         return await db.checkChiTieu(ListEdit);
     }
     static async capNhatChiTieu(ListEdit) {
@@ -15,7 +15,7 @@ module.exports = class ChiTieu {
     static async nhapChiTieu(id, currentDate, portion) {
         return await db.nhapChiTieu(id, currentDate, portion);
     }
-    static async checkPortionSet(id, currentDate) {
+    static async kiemtraChiTieu(id, currentDate) {
         return await db.checkPortionSet(id, currentDate);
     }
 };
