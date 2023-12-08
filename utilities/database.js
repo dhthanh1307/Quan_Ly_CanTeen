@@ -14,7 +14,7 @@ const cn = {
 const db = pgp(cn);
 
 module.exports = {
-    findUser: async (username, password, isAdmin) => {
+    timkiemTaiKhoan: async (username, password, isAdmin) => {
         const query = `SELECT * FROM "User" WHERE "Username" = $1 AND "Password" = $2 AND "isAdmin" = $3`;
         const values = [username, password, isAdmin];
         const data = await db.query(query, values);
@@ -65,7 +65,7 @@ module.exports = {
             dbcn.done();
         }
     },
-    checkThucPham: async (listmonan) => {
+    kiemtraThucPham: async (listmonan) => {
         let dbcn = null;
         try {
             dbcn = await db.connect();
@@ -93,22 +93,22 @@ module.exports = {
             dbcn.done();
         }
     },
-    updateMonAn: async (MaMonAn, TenMonAn, GiaBan) => {
+    capNhapMonAn: async (MaMonAn, TenMonAn, GiaBan) => {
         const query = `UPDATE "MonAn" SET "TenMonAn" = '${TenMonAn}', "GiaBan" = '${GiaBan}' WHERE "MaMonAn" = '${MaMonAn}'`;
         await db.query(query);
     },
 
-    insertHoaDon: async (PhuongThuc, SoTien) => {
+    nhapHoaDon: async (PhuongThuc, SoTien) => {
         const query = `INSERT INTO "HoaDon"("PhuongThuc","SoTien") VALUES ( '${PhuongThuc}', '${SoTien}') RETURNING "MaBanHang"`;
         const result = await db.query(query);
         return result[0].MaBanHang;
     },
-    insertBanHang: async (MaBanHang, MonAn) => {
+    nhapBanHang: async (MaBanHang, MonAn) => {
         const currentDate = new Date();
         const query = `INSERT INTO "BanHang" VALUES ('${MaBanHang}','${MonAn.MaMonAn}','${MonAn.SoLuong}','${currentDate.toISOString()}')`;
         await db.query(query);
     },
-    insertStaff: async (username, password, isadmin,name) => {
+    themNhanSu: async (username, password, isadmin,name) => {
         const query = `INSERT INTO "User" VALUES ('${username}','${password}','${isadmin}','${name}') ON CONFLICT ("Username") DO NOTHING`;
         await db.query(query);
     },
@@ -136,7 +136,7 @@ module.exports = {
             dbcn.done();
         }
     },
-    thongke: async (Date, type) => {
+    thongKeDoanhThu: async (Date, type) => {
         let dbcn = null;
         try {
             dbcn = await db.connect();
@@ -177,7 +177,7 @@ module.exports = {
             dbcn.done();
         }
     },
-    insertThucPham: async (MaThucPham, SoLuongNhap, NgayNhap, GiaNhap) => {
+    nhapThucPham: async (MaThucPham, SoLuongNhap, NgayNhap, GiaNhap) => {
         const insertQuery = `INSERT INTO "NhapHang" ("MaThucPham", "SoLuongNhap", "NgayNhap", "GiaNhap") VALUES ($1, $2, $3, $4) RETURNING "MaNhapHang"`;
         const insertValues = [MaThucPham, SoLuongNhap, NgayNhap, GiaNhap];
         const insertResult = await db.query(insertQuery, insertValues);
@@ -189,7 +189,7 @@ module.exports = {
         }
         return insertResult[0].MaNhapHang;
     },
-    updateThucPham:async (listmonan)=>{
+    capNhatThucPham:async (listmonan)=>{
         for (const monan of listmonan) {
             if(monan.MaMonAn[0]!='C'){
                 try {
@@ -204,7 +204,7 @@ module.exports = {
         }
 
     },
-    updateChiTieu:async (listmonan)=>{
+    capNhatChiTieu:async (listmonan)=>{
         for (const monan of listmonan) {
             if(monan.MaMonAn[0]=='C'){
                 try {
@@ -219,12 +219,12 @@ module.exports = {
         }
 
     },
-    removeThucPham: async (MaThucPham, SoLuong) => {
+    xuatThucPham: async (MaThucPham, SoLuong) => {
         const updateQuery = `UPDATE "ThucPham" SET "SoLuongTrongKho" = "SoLuongTrongKho" - $1 WHERE "MaThucPham" = $2`;
         const updateValues = [SoLuong, MaThucPham];
         await db.query(updateQuery, updateValues);
     },
-    searchThucPham: async (Keyword) => {
+    timkiemThucPham: async (Keyword) => {
         let dbcn = null;
         try {
             dbcn = await db.connect();
@@ -236,7 +236,7 @@ module.exports = {
             dbcn.done();
         }
     },
-    setPortion: async (id, currentDate, portion) => {
+    themChiTieu: async (id, currentDate, portion) => {
         const checkQuery = `SELECT SUM(CT."SoLuongThucPham" * $1) <= SUM(TP."SoLuongTrongKho") AS check FROM "CongThuc" CT JOIN "ThucPham" TP ON CT."MaThucPham" = TP."MaThucPham" WHERE CT."MaMonAn" = $2 GROUP BY CT."MaMonAn"`;
         const checkValues = [portion, id];
         const checkResult = await db.any(checkQuery, checkValues);
@@ -262,12 +262,12 @@ module.exports = {
 
         return exists.exists;
     },
-    removeStaff: async (username) => {
+    xoaNhanSu: async (username) => {
         const deleteQuery = `DELETE FROM "User" WHERE "Username" = $1 RETURNING *`;
         const deleteValues = [username];
         await db.query(deleteQuery, deleteValues);
     },
-    insertGioLam: async (username,giolam,ngay)=>{
+    nhapGioLam: async (username,giolam,ngay)=>{
         const insertQuery = `INSERT INTO "LamViec" VALUES ($1, $2, $3) `;
         const insertValues = [username, giolam, ngay];
         await db.none(insertQuery, insertValues);
@@ -280,7 +280,7 @@ module.exports = {
         console.log(data)
         return data;
     },
-    insertKhachHang: async (SoDienThoai) => {
+    themKhachHang: async (SoDienThoai) => {
         const checkQuery = `SELECT "SoDienThoai" FROM "KhachHang" WHERE "SoDienThoai" = $1`;
         const checkValues = [SoDienThoai];
         const checkResult = await db.query(checkQuery, checkValues);
@@ -302,7 +302,7 @@ module.exports = {
 
         return result.length > 0 ? result[0] : null;
     },
-    updateKhachHang: async (SoDienThoai, newTichLuy, newGiamGia) => {
+    capNhatKhachHang: async (SoDienThoai, newTichLuy, newGiamGia) => {
         const updateQuery = `UPDATE "KhachHang" SET "TichLuy" = $1, "GiamGia" = $2 WHERE "SoDienThoai" = $3`;
         const updateValues = [newTichLuy, newGiamGia, SoDienThoai];
         await db.query(updateQuery, updateValues);

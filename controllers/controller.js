@@ -9,18 +9,18 @@ module.exports = {
             next(err);
         }
     },
-    findUser: async (req, res, next) => {
+    kiemtraTaiKhoan: async (req, res, next) => {
         try {
             console.log('find user');
             const body = req.body;
-            const result = await db.findUser(body.username, body.password, body.isAdmin);
+            const result = await db.timkiemTaiKhoan(body.username, body.password, body.isAdmin);
             res.json({ result: result });
         }
         catch (err) {
             next(err);
         }
     },
-    getAllMonAn: async (req, res, next) => {
+    getAllFood: async (req, res, next) => {
         try {
             console.log('all mon an');
             const data = await db.getAllMonAn();
@@ -30,11 +30,11 @@ module.exports = {
             next(err);
         }
     },
-    updateMonAn: async (req, res, next) => {
+    capnhatMonAn: async (req, res, next) => {
         try {
             console.log('update mon an');
             const body = req.body;
-            const result = await db.updateMonAn(body.MaMonAn, body.TenMonAn, body.GiaBan);
+            const result = await db.capNhapMonAn(body.MaMonAn, body.TenMonAn, body.GiaBan);
             res.json({});
         }
         catch (err) {
@@ -42,25 +42,25 @@ module.exports = {
         }
     },
 
-    thanhtoan: async (req, res, next) => {
+    thanhtoanHoaDon: async (req, res, next) => {
         try {
             console.log('check so luong');
             var ktra = false;
             const body = req.body;
             const chitieu = await db.checkChiTieu(body.ListEdit);
-            const thucpham = await db.checkThucPham(body.ListEdit);
+            const thucpham = await db.kiemtraThucPham(body.ListEdit);
             console.log('thucpham: ', thucpham);
             console.log('chitieu: ', chitieu);
 
             if (chitieu && thucpham) {
                 ktra = true;
                 console.log('thanhtoan');
-                const mabanhang = await db.insertHoaDon(body.PhuongThuc, body.SoTien);
+                const mabanhang = await db.nhapHoaDon(body.PhuongThuc, body.SoTien);
                 for (let i = 0; i < body.ListEdit.length; i++)
                     if (body.ListEdit[i].SoLuong > 0)
-                        await db.insertBanHang(mabanhang, body.ListEdit[i]);
-                db.updateChiTieu(body.ListEdit);
-                db.updateThucPham(body.ListEdit);
+                        await db.nhapBanHang(mabanhang, body.ListEdit[i]);
+                db.capNhatChiTieu(body.ListEdit);
+                db.capNhatThucPham(body.ListEdit);
             }
             res.json({ ktra });
 
@@ -69,7 +69,7 @@ module.exports = {
             next(e);
         }
     },
-    getAllThucPham: async (req, res, next) => {
+    getAllGoods: async (req, res, next) => {
         try {
             console.log('all thuc pham');
             const data = await db.getAllThucPham();
@@ -79,51 +79,51 @@ module.exports = {
             next(err);
         }
     },
-    insertThucPham: async (req, res, next) => {
+    nhapThucPham: async (req, res, next) => {
         try {
             console.log('insert thuc pham');
             const body = req.body;
-            const result = await db.insertThucPham(body.MaThucPham, body.SoLuongNhap, body.NgayNhap, body.GiaNhap);
+            const result = await db.nhapThucPham(body.MaThucPham, body.SoLuongNhap, body.NgayNhap, body.GiaNhap);
             res.json({});
         }
         catch (err) {
             next(err);
         }
     },
-    removeThucPham: async (req, res, next) => {
+    xuatThucPham: async (req, res, next) => {
         try {
             console.log('remove thuc pham');
             const body = req.body;
-            const result = await db.removeThucPham(body.MaThucPham, body.SoLuong);
+            const result = await db.xuatThucPham(body.MaThucPham, body.SoLuong);
             res.json({});
         }
         catch (err) {
             next(err);
         }
     },
-    searchThucPham: async (req, res, next) => {
+    timkiemThucPham: async (req, res, next) => {
         try {
             const body = req.body;
             console.log('search thuc pham keyword: ' + body.Keyword);
-            const data = await db.searchThucPham(body.Keyword);
+            const data = await db.timkiemThucPham(body.Keyword);
             res.json(data);
         }
         catch(e){
             console.log(e);
         }
     },
-    setPortion: async (req, res, next) => {
+    nhapChiTieu: async (req, res, next) => {
         try {
             const body = req.body;
             console.log('set chi tieu: ' + body.id);
-            const data = await db.setPortion(body.id, body.currentDate, body.portion);
+            const data = await db.nhapChiTieu(body.id, body.currentDate, body.portion);
             res.json(data);
         }
         catch(e){
             console.log(e);
         }
     },
-    checkPortionSet: async (req, res, next) => {
+    kiemtraChiTieu: async (req, res, next) => {
         try {
             const body = req.body;
             const data = await db.checkPortionSet(body.id, body.currentDate);
@@ -133,18 +133,18 @@ module.exports = {
             console.log(e);
         }
     },
-    thongke: async (req, res, next) => {
+    thongKeDoanhThu: async (req, res, next) => {
         try {
             console.log('thong ke doanh thu ');
             const body = req.body;
-            const result = await db.thongke(body.Date, body.Type);
+            const result = await db.thongKeDoanhThu(body.Date, body.Type);
             console.log(result);
             res.json(result);
         } catch (err) {
             next(err);
         }
     },
-    nhansu: async (req, res, next) => {
+    getStaff: async (req, res, next) => {
         try {
             console.log('nhan su');
             const data = await db.getNhanSu();
@@ -153,38 +153,38 @@ module.exports = {
             next(err);
         }
     },
-    removeStaff: async (req, res, next) => {
+    xoaNhanSu: async (req, res, next) => {
         try {
             console.log('xoa nhan vien');
             const body = req.body;
-            await db.removeStaff(body.Username);
+            await db.xoaNhanSu(body.Username);
             res.json({});
         } catch (err) {
             next(err);
         }
 
     },
-    insertStaff: async (req, res, next) => {
+    themNhanSu: async (req, res, next) => {
         try {
             console.log('insert nhan su');
             const body = req.body;
-            await db.insertStaff(body.Username, body.Password, body.Admin,body.Name);
+            await db.themNhanSu(body.Username, body.Password, body.Admin,body.Name);
             res.json({});
         } catch (e) {
             next(e);
         }
     },
-    insertGioLam:  async (req, res, next) => {
+    nhapGioLam:  async (req, res, next) => {
         try {
             console.log('insert gio lam');
             const body = req.body;
-            await db.insertGioLam(body.Username, body.GioLam,body.Ngay);
+            await db.nhapGioLam(body.Username, body.GioLam,body.Ngay);
             res.json({});
         } catch (e) {
             next(e);
         }
     },
-    getGiolam:async (req, res, next) => {
+    getWork:async (req, res, next) => {
         try {
             console.log('thong ke gio lam ');
             const body = req.body;
@@ -194,17 +194,17 @@ module.exports = {
             next(err);
         }
     },
-    insertKhachHang: async (req, res, next) => {
+    themKhachHang: async (req, res, next) => {
         try {
             const body = req.body;
-            const result = await db.insertKhachHang(body.SoDienThoai);
+            const result = await db.themKhachHang(body.SoDienThoai);
             res.json(result);
         }
         catch(e){
             console.log(e);
         }
     },
-    getKhachHang: async (req, res, next) => {
+    getCustomer: async (req, res, next) => {
         try {
             const body = req.body;
             const data = await db.getKhachHang(body.SoDienThoai);
@@ -214,7 +214,7 @@ module.exports = {
             console.log(e);
         }
     },
-    updateKhachHang: async (req, res, next) => {
+    capNhatKhachHang: async (req, res, next) => {
         try {
             const body = req.body;
             const data = await db.getKhachHang(body.SoDienThoai);
@@ -233,7 +233,7 @@ module.exports = {
                 newGiamGia = 0.05;
             }
             else newGiamGia = 1;
-            await db.updateKhachHang(body.SoDienThoai, newTichLuy, newGiamGia);
+            await db.capNhatKhachHang(body.SoDienThoai, newTichLuy, newGiamGia);
         }
         catch(e){
             console.log(e);
