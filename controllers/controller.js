@@ -67,7 +67,7 @@ module.exports = {
                 const mabanhang = await HoaDon.nhapHoaDon(body.PhuongThuc, body.SoTien);//TODO
                 for (let i = 0; i < body.ListEdit.length; i++)
                     if (body.ListEdit[i].SoLuong > 0)
-                        await BanHang.nhapBanHang(mabanhang, body.ListEdit[i]);//TODO
+                        await BanHang.nhapBanHang(mabanhang, body.ListEdit[i], body.GiamGia);//TODO
                 ChiTieu.capNhatChiTieu(body.ListEdit);
                 ThucPham.capNhatThucPham(body.ListEdit);
             }
@@ -216,7 +216,7 @@ module.exports = {
     getCustomer: async (req, res, next) => {
         try {
             const body = req.body;
-            const data = await KhachHang.getKhachHang(body.SoDienThoai);
+            const data = await KhachHang.timkiemKhachHang(body.SoDienThoai);
             res.json(data);
         }
         catch(e){
@@ -226,7 +226,7 @@ module.exports = {
     capNhatKhachHang: async (req, res, next) => {
         try {
             const body = req.body;
-            const data = await KhachHang.getKhachHang(body.SoDienThoai);
+            const data = await KhachHang.timkiemKhachHang(body.SoDienThoai);
             const newTichLuy = data.TichLuy + body.ThanhToan;
             let newGiamGia = 0;
             if (newTichLuy < 100000) {

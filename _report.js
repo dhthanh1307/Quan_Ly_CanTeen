@@ -46,7 +46,7 @@ export default{
                     <thead class="table-dark">
                         <th scope="col">Mã món ăn</th>
                         <th scope="col">Tên món ăn</th>
-                        <th scope="col">Giá bán</th>
+                        <th scope="col">Giá bán gốc</th>
                         <th scope="col">Số lượng</th>
                         <th scope="col">Thành Tiền</th>
                     </thead>
@@ -54,7 +54,7 @@ export default{
                         <tr v-for="item in DoanhThu" :key="item.MaMonAn">
                             <td>{{ item.MaMonAn }}</td>
                             <td>{{ item.TenMonAn }}</td>
-                            <td>{{ item.GiaBan}}</td>
+                            <td>{{ item.GiaBan }}</td>
                             <td>{{ item.SoLuongBan }}</td>
                             <td>{{ item.TongThanhTien }}</td>
                         </tr>

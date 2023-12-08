@@ -73,7 +73,7 @@ export default {
 
     },
     beforeMount() {
-
+        this.checkSDT();
     },
     template: `
     <div class="container w-100 ">

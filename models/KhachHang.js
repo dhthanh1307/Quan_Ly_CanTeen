@@ -9,7 +9,7 @@ module.exports = class KhachHang {
     static async themKhachHang(SoDienThoai) {
         return await db.themKhachHang(SoDienThoai);
     }
-    static async getKhachHang(SoDienThoai) {
+    static async timkiemKhachHang(SoDienThoai) {
         return await db.getKhachHang(SoDienThoai);
     }
     static async capNhatKhachHang(SoDienThoai, newTichLuy, newGiamGia) {

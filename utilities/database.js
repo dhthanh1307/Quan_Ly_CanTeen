@@ -104,9 +104,9 @@ module.exports = {
         const result = await db.query(query);
         return result[0].MaBanHang;
     },
-    nhapBanHang: async (MaBanHang, MonAn) => {
+    nhapBanHang: async (MaBanHang, MonAn, GiamGia) => {
         const currentDate = new Date();
-        const query = `INSERT INTO "BanHang" VALUES ('${MaBanHang}','${MonAn.MaMonAn}','${MonAn.SoLuong}','${currentDate.toISOString()}')`;
+        const query = `INSERT INTO "BanHang" VALUES ('${MaBanHang}','${MonAn.MaMonAn}','${MonAn.SoLuong}','${currentDate.toISOString()}', '${GiamGia}')`;
         await db.query(query);
     },
     themNhanSu: async (username, password, isadmin,name) => {
@@ -149,7 +149,7 @@ module.exports = {
                 "MonAn"."TenMonAn",
                 "MonAn"."GiaBan",
                 SUM("BanHang"."SoLuong") AS "SoLuongBan",
-                SUM("BanHang"."SoLuong" * "MonAn"."GiaBan") AS "TongThanhTien"
+                SUM("BanHang"."SoLuong" * "MonAn"."GiaBan" * (1 - "BanHang"."MucGiamGia")) AS "TongThanhTien"
             FROM
                 "BanHang"
             JOIN

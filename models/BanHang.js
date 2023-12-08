@@ -6,10 +6,9 @@ module.exports = class BanHang {
         this.MaMonAn = rawBanHang.MaMonAn;
         this.SoLuong = rawBanHang.SoLuong;
         this.NgayBan = rawBanHang.NgayBan;
-
+        this.MucGiamGia = rawBanHang.MucGiamGia;
     }
-    static async nhapBanHang(MaBanHang, MonAn) {
-        return await db.nhapBanHang(MaBanHang, MonAn);
+    static async nhapBanHang(MaBanHang, MonAn, GiamGia) {
+        return await db.nhapBanHang(MaBanHang, MonAn, GiamGia);
     }
-    
 };
