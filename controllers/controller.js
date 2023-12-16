@@ -64,10 +64,10 @@ module.exports = {
             if (chitieu && thucpham) {
                 ktra = true;
                 console.log('thanhtoan');
-                const mabanhang = await HoaDon.nhapHoaDon(body.PhuongThuc, body.SoTien);//TODO
+                const mabanhang = await HoaDon.nhapHoaDon(body.PhuongThuc, body.SoTien);
                 for (let i = 0; i < body.ListEdit.length; i++)
                     if (body.ListEdit[i].SoLuong > 0)
-                        await BanHang.nhapBanHang(mabanhang, body.ListEdit[i], body.GiamGia);//TODO
+                        await BanHang.nhapBanHang(mabanhang, body.ListEdit[i], body.GiamGia);
                 ChiTieu.capNhatChiTieu(body.ListEdit);
                 ThucPham.capNhatThucPham(body.ListEdit);
             }
@@ -135,7 +135,7 @@ module.exports = {
     kiemtraChiTieu: async (req, res, next) => {
         try {
             const body = req.body;
-            const data = await ChiTieu.kiemTraChiTieu(body.id, body.currentDate);
+            const data = await ChiTieu.kiemtraChiTieu(body.id, body.currentDate);
             res.json(data);
         }
         catch(e){
@@ -187,7 +187,7 @@ module.exports = {
         try {
             console.log('insert gio lam');
             const body = req.body;
-            await LamViec.nhapGioLam(body.Username, body.GioLam,body.Ngay);//TODO
+            await LamViec.nhapGioLam(body.Username, body.GioLam,body.Ngay);
             res.json({});
         } catch (e) {
             next(e);
@@ -197,7 +197,7 @@ module.exports = {
         try {
             console.log('thong ke gio lam ');
             const body = req.body;
-            const result = await LamViec.getLamViec();//TODO
+            const result = await LamViec.getLamViec();
             res.json(result);
         } catch (err) {
             next(err);
@@ -244,6 +244,7 @@ module.exports = {
             else newGiamGia = 1;
             console.log(newTichLuy)
             await KhachHang.capNhatKhachHang(body.SoDienThoai, newTichLuy, newGiamGia);
+            res.json({});
         }
         catch(e){
             console.log(e);

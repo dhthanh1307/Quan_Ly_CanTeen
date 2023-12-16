@@ -16,6 +16,12 @@ export default {
             else {
                 $('#currentDiscount').css("display", "block")
             }
+        },
+        TichLuy: function(newValue, oldValue) {
+            this.checkSDT();
+        },
+        GiamGia: function(newValue, oldValue) {
+            this.checkSDT();
         }
     },
     computed: {

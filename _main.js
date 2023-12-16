@@ -7,7 +7,7 @@ class DisplayMonAn {
         this.TenMonAn = MonAn.TenMonAn;
         this.GiaBan = MonAn.GiaBan;
         this.HanSuDung = MonAn.HanSuDung;
-        this.SoLuong=MonAn.SoLuong;
+        this.SoLuong = MonAn.SoLuong;
     }
 };
 
@@ -95,7 +95,7 @@ async function fetchGetAllThucPham() {
 
 async function fetchInsertThucPham(MaThucPham, SoLuongNhap, NgayNhap, GiaNhap) {
     const url = `http://localhost:3000/insertThucPham`;
-    const json = await fetchPost(url, { MaThucPham: MaThucPham, SoLuongNhap: SoLuongNhap, NgayNhap: NgayNhap, GiaNhap:GiaNhap });
+    const json = await fetchPost(url, { MaThucPham: MaThucPham, SoLuongNhap: SoLuongNhap, NgayNhap: NgayNhap, GiaNhap: GiaNhap });
     return json;
 }
 
@@ -145,7 +145,7 @@ async function fetchUpdateKhachHang(SoDienThoai, TichLuy, GiamGia, ThanhToan) {
     return json;
 }
 
-import { computed  ,watch,} from 'vue'
+import { computed, watch, } from 'vue'
 import vclogin from './_login.js'
 import vcnav from './_nav.js'
 import vccontent from './_content.js'
@@ -164,19 +164,19 @@ export default {
         return {
 
             login: false,
-            Username:'',
+            Username: '',
             isAdmin: false,
-            timelogin:null,
+            timelogin: null,
 
             comName: 'vccontent',
             loading: false,
             ListMonAn: [],
             ListThucPham: [],
-            DoanhThu:[],
-            NhanSu:[],
-            ChiTieu:[],
+            DoanhThu: [],
+            NhanSu: [],
+            ChiTieu: [],
             isPortionSet: false,
-            LamViec:[],
+            LamViec: [],
             SoDienThoai: null,
             TichLuy: 0,
             GiamGia: 0,
@@ -190,9 +190,9 @@ export default {
         return {
             ListMonAn: computed(() => this.ListMonAn),
             ListThucPham: computed(() => this.ListThucPham),
-            DoanhThu: computed(()=> this.DoanhThu),
-            NhanSu: computed(()=> this.NhanSu),
-            LamViec: computed(()=> this.LamViec),
+            DoanhThu: computed(() => this.DoanhThu),
+            NhanSu: computed(() => this.NhanSu),
+            LamViec: computed(() => this.LamViec),
             isPortionSet: computed(() => this.isPortionSet),
             SoDienThoai: computed(() => this.SoDienThoai),
             TichLuy: computed(() => this.TichLuy),
@@ -205,8 +205,8 @@ export default {
             if (res.result) {
                 this.login = true;
                 this.isAdmin = isAdmin;
-                this.Username=username;
-                this.timelogin=new Date();
+                this.Username = username;
+                this.timelogin = new Date();
             }
             else {
                 this.showToast();
@@ -219,7 +219,7 @@ export default {
         },
         currentDate() {
             const current = new Date();
-            const date = `${current.getFullYear()}-${current.getMonth()+1}-${current.getDate()}`;
+            const date = `${current.getFullYear()}-${current.getMonth() + 1}-${current.getDate()}`;
             return date;
         },
         changePage(page) {
@@ -231,7 +231,7 @@ export default {
                 }
                 catch (error) {
                     console.log(error);
-                }   
+                }
             }
         },
         async reloadMonAn() {
@@ -251,24 +251,24 @@ export default {
                 console.log(error);
             }
         },
-        async thanhtoan(result,ListEdit,SoDienThoai,TichLuy,GiamGia){
+        async thanhtoan(result, ListEdit, SoDienThoai, TichLuy, GiamGia) {
             const url = `http://localhost:3000/insertHoaDon`;
             let newResult = result;
             if (this.SoDienThoai != null) newResult = result * (1 - this.GiamGia);
-            const json = await fetchPost(url, {PhuongThuc:`online`,SoTien:newResult,ListEdit:ListEdit, GiamGia: GiamGia});
-            if(json.ktra===false){
+            const json = await fetchPost(url, { PhuongThuc: `online`, SoTien: newResult, ListEdit: ListEdit, GiamGia: GiamGia });
+            if (json.ktra === false) {
                 alert('Số lượng sản phẩm trong kho không đủ');
             }
-            else{
+            else {
                 alert('Thanh toán thành công');
-                await fetchGetKhachHang(SoDienThoai);
-            }
-            if (this.SoDienThoai != null) {
-                await fetchUpdateKhachHang(SoDienThoai, TichLuy, GiamGia, result);
+                if (this.SoDienThoai != null) {
+                    await fetchUpdateKhachHang(SoDienThoai, TichLuy, GiamGia, result);
+                    await this.getKhachHang(SoDienThoai);
+                }
             }
             return json;
         },
-        async thongke(date,option){
+        async thongke(date, option) {
             try {
                 const url = `http://localhost:3000/thongke`;
                 const json = await fetchPost(url, { Date: date, Type: option });
@@ -302,7 +302,7 @@ export default {
                 console.log(error);
             }
         },
-        async loadStaff(){
+        async loadStaff() {
             const url = `http://localhost:3000/nhansu`;
             const json = await fetchGet(url);
             this.NhanSu = json;
@@ -346,15 +346,15 @@ export default {
                 const res = await fetchSearchThucPham(Keyword);
                 this.ListThucPham = res.displayArrayThucPham;
             }
-            catch(e){
+            catch (e) {
                 console.log(e);
             }
         },
-        async fetchRemoveStaff(username){
+        async fetchRemoveStaff(username) {
             const url = `http://localhost:3000/removeStaff`;
-            const json = await fetchPost(url, {Username:username});
+            const json = await fetchPost(url, { Username: username });
         },
-        async removeStaff(username){
+        async removeStaff(username) {
             try {
                 await this.fetchRemoveStaff(username);
                 await this.loadStaff();
@@ -362,10 +362,10 @@ export default {
                 console.log(error);
             }
         },
-        async insertStaff(uname,pw,admin,name){
+        async insertStaff(uname, pw, admin, name) {
             try {
-                const url=`http://localhost:3000/insertStaff`;
-                const res = await fetchPost(url,{Username:uname,Password:pw,Admin:admin,Name:name});
+                const url = `http://localhost:3000/insertStaff`;
+                const res = await fetchPost(url, { Username: uname, Password: pw, Admin: admin, Name: name });
                 await this.loadStaff();
             } catch (error) {
                 console.log(error);
@@ -375,7 +375,8 @@ export default {
             this.comName = 'vcserving';
             this.loading = true;
             try {
-                this.reloadMonAn();
+                await this.resetPortionCheck();
+                await this.reloadMonAn();
             }
             catch (error) {
                 console.log(error);
@@ -407,19 +408,19 @@ export default {
         async resetPortionCheck() {
             this.isPortionSet = false;
         },
-        async logOut(){
-            if(this.isAdmin!=true){
-                const giolam=((new Date() - this.timelogin) / (1000 * 60 * 60));           
-                const url=`http://localhost:3000/insertGioLam`;
-                const res = await fetchPost(url,{Username:this.Username,GioLam:giolam,Ngay:new Date()});
+        async logOut() {
+            if (this.isAdmin != true) {
+                const giolam = ((new Date() - this.timelogin) / (1000 * 60 * 60));
+                const url = `http://localhost:3000/insertGioLam`;
+                const res = await fetchPost(url, { Username: this.Username, GioLam: giolam, Ngay: new Date() });
             }
-          
-            window.location.href='/';
+
+            window.location.href = '/';
         },
-        async thongkegiolam(){
-            const url=`http://localhost:3000/giolam`;
+        async thongkegiolam() {
+            const url = `http://localhost:3000/giolam`;
             const res = await fetchGet(url);
-            this.LamViec=res;
+            this.LamViec = res;
         },
         async createKhachHang(SoDienThoai) {
             try {
