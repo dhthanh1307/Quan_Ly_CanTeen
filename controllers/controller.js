@@ -239,9 +239,10 @@ module.exports = {
                 newGiamGia = 0.05;
             }
             else if (newTichLuy >= 500000 && newTichLuy < 1000000) {
-                newGiamGia = 0.05;
+                newGiamGia = 0.07;
             }
             else newGiamGia = 1;
+            console.log(newTichLuy)
             await KhachHang.capNhatKhachHang(body.SoDienThoai, newTichLuy, newGiamGia);
         }
         catch(e){

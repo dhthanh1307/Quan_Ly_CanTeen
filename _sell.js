@@ -161,7 +161,7 @@ export default {
                             </div>
                             <button @click="createNew" style="height: fit-content;" type="button" class="btn btn-success">Tạo</button>
                         </div>
-                        <span id="currentDiscount" class="text-center text-secondary fs-6" style="display: none;">Mức giảm giá hiện tại: {{ this.GiamGia * 100 }}%</span>
+                        <span id="currentDiscount" class="text-center text-secondary fs-6" style="display: none;">Mức giảm giá hiện tại: {{ Math.round(this.GiamGia * 100) }}%</span>
                     </div>
                     <div class="d-flex justify-content-end w-100">
                         <button @click="calTotal()" type="button" class="btn btn-success w-100">Thanh toán </button>

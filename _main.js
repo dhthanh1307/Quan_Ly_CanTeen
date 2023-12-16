@@ -261,6 +261,7 @@ export default {
             }
             else{
                 alert('Thanh toán thành công');
+                await fetchGetKhachHang(SoDienThoai);
             }
             if (this.SoDienThoai != null) {
                 await fetchUpdateKhachHang(SoDienThoai, TichLuy, GiamGia, result);
@@ -408,7 +409,7 @@ export default {
         },
         async logOut(){
             if(this.isAdmin!=true){
-                const giolam=(new Date() - this.timelogin) / (1000 * 60 * 60);            
+                const giolam=((new Date() - this.timelogin) / (1000 * 60 * 60));           
                 const url=`http://localhost:3000/insertGioLam`;
                 const res = await fetchPost(url,{Username:this.Username,GioLam:giolam,Ngay:new Date()});
             }
