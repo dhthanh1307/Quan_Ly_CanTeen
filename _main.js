@@ -8,6 +8,7 @@ class DisplayMonAn {
         this.GiaBan = MonAn.GiaBan;
         this.HanSuDung = MonAn.HanSuDung;
         this.SoLuong = MonAn.SoLuong;
+        this.CongThuc = MonAn.CongThuc;
     }
 };
 
@@ -74,9 +75,9 @@ async function fetchLogin(username, password, isAdmin) {
     return json;
 }
 
-async function fetchUpdateMonAn(ID, Name, Price) {
+async function fetchUpdateMonAn(ID, Name, Price, newCongThuc) {
     const url = `http://localhost:3000/updateMonAn`;
-    const json = await fetchPost(url, { MaMonAn: ID, TenMonAn: Name, GiaBan: Price });
+    const json = await fetchPost(url, { MaMonAn: ID, TenMonAn: Name, GiaBan: Price, newCongThuc: newCongThuc });
     return json;
 }
 
@@ -113,6 +114,18 @@ async function fetchSearchThucPham(Keyword) {
             return ThucPham;
         })
     };
+}
+
+async function fetchAddMonAn(MaMonAn, TenMonAn, GiaBan, HanSuDung, HinhAnh, newCongThuc) {
+    const url = `http://localhost:3000/themMonAn`;
+    const json = await fetchPost(url, { MaMonAn: MaMonAn, TenMonAn: TenMonAn, GiaBan: GiaBan, HanSuDung: HanSuDung, HinhAnh: HinhAnh, newCongThuc: newCongThuc });
+    return json;
+}
+
+async function fetchAddThucPham(MaThucPham, TenThucPham, DonViTinh) {
+    const url = `http://localhost:3000/themThucPham`;
+    const json = await fetchPost(url, { MaThucPham: MaThucPham, TenThucPham: TenThucPham, DonViTinh: DonViTinh });
+    return json;
 }
 
 async function fetchSetPortion(id, currentDate, portion) {
@@ -278,9 +291,9 @@ export default {
                 console.error('Error during thongke API call:', error);
             }
         },
-        async updateItem(ID, Name, Price) {
+        async updateItem(ID, Name, Price, newCongThuc) {
             try {
-                const res = await fetchUpdateMonAn(ID, Name, Price);
+                const res = await fetchUpdateMonAn(ID, Name, Price, newCongThuc);
                 this.reloadMonAn();
             } catch (error) {
                 console.log(error);
@@ -345,6 +358,24 @@ export default {
             try {
                 const res = await fetchSearchThucPham(Keyword);
                 this.ListThucPham = res.displayArrayThucPham;
+            }
+            catch (e) {
+                console.log(e);
+            }
+        },
+        async addMonAn(MaMonAn, TenMonAn, GiaBan, HanSuDung, HinhAnh, newCongThuc) {
+            try {
+                await fetchAddMonAn(MaMonAn, TenMonAn, GiaBan, HanSuDung, HinhAnh, newCongThuc);
+                this.reloadMonAn();
+            }
+            catch (e) {
+                console.log(e);
+            }
+        },
+        async addThucPham(MaThucPham, TenThucPham, DonViTinh) {
+            try {
+                await fetchAddThucPham(MaThucPham, TenThucPham, DonViTinh);
+                this.reloadThucPham();
             }
             catch (e) {
                 console.log(e);
@@ -480,7 +511,7 @@ export default {
                 @remove-thuc-pham="removeThucPham" @search-thuc-pham="searchThucPham" 
                 @set-portion="setPortion" @check-portion-set="checkPortionSet"
                 @get-khach-hang="getKhachHang" @reset-khach-hang="resetKhachHang"
-                @thongkegiolam="thongkegiolam"
+                @thongkegiolam="thongkegiolam" @add-thuc-pham="addThucPham" @add-mon-an="addMonAn"
                 @create-khach-hang="createKhachHang" @reset-portion-check="resetPortionCheck" :is="comName"/>
                 <component v-else :is="comName"/>                                   
             </div>

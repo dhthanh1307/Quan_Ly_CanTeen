@@ -7,6 +7,9 @@ module.exports = class ThucPham {
         this.DonViTinh = rawThucPham.DonViTinh;
         this.SoLuongTrongKho = rawThucPham.SoLuongTrongKho;
     }
+    static async themThucPham(MaThucPham, TenThucPham, DonViTinh) {
+        await db.themThucPham(MaThucPham, TenThucPham, DonViTinh);
+    }
     static async getThucPham() {
         return await db.getAllThucPham();
     }

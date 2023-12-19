@@ -43,7 +43,7 @@ module.exports = {
         try {
             console.log('update mon an');
             const body = req.body;
-            const result = await MonAn.capNhapMonAn(body.MaMonAn, body.TenMonAn, body.GiaBan);
+            const result = await MonAn.capNhapMonAn(body.MaMonAn, body.TenMonAn, body.GiaBan, body.newCongThuc);
             res.json({});
         }
         catch (err) {
@@ -116,6 +116,28 @@ module.exports = {
             console.log('search thuc pham keyword: ' + body.Keyword);
             const data = await ThucPham.timkiemThucPham(body.Keyword);
             res.json(data);
+        }
+        catch(e){
+            console.log(e);
+        }
+    },
+    themMonAn: async (req, res, next) => {
+        try {
+            const body = req.body;
+            console.log('them mon an: ' + body.MaMonAn);
+            await MonAn.themMonAn(body.MaMonAn, body.TenMonAn, body.GiaBan, body.HanSuDung, body.HinhAnh, body.newCongThuc);
+            res.json({});
+        }
+        catch(e){
+            console.log(e);
+        }
+    },
+    themThucPham: async (req, res, next) => {
+        try {
+            const body = req.body;
+            console.log('them thuc pham: ' + body.MaThucPham);
+            await ThucPham.themThucPham(body.MaThucPham, body.TenThucPham, body.DonViTinh);
+            res.json({});
         }
         catch(e){
             console.log(e);

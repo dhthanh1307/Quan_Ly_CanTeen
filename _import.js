@@ -1,6 +1,6 @@
-export default{
+export default {
     inject: ['ListThucPham'],
-    data(){
+    data() {
         return {
             selectedId: null,
             selectedID_Max: 0
@@ -66,10 +66,23 @@ export default{
                 this.$emit('searchThucPham', $('#inputKeyword').val());
             }
             else this.$emit('searchThucPham', "");
+        },
+        switchToAddForm() {
+            $('#ImportForm').css("display", "none");
+            $('#AddForm').css("display", "block");
+        },
+        switchToImportForm() {
+            $('#ImportForm').css("display", "block");
+            $('#AddForm').css("display", "none");
+        },
+        addNewThucPham() {
+            if ($('#Unit-input-a').val().trim() !== '' && $("#ID-input-a").val().trim() !== '' && $("#Name-input-a").val().trim() !== '') {
+                this.$emit('addThucPham', $('#ID-input-a').val(), $('#Name-input-a').val(), $('#Unit-input-a').val());
+            }
         }
     },
     template:
-    `<div class="container w-100 mb-5">
+        `<div class="container w-100 mb-5">
         <nav class="navbar w-100">
             <span class="navbar-brand fs-1 fw-bold user-select-none">Quản lý kho hàng</span>
         </nav>
@@ -90,86 +103,122 @@ export default{
                     </div>
                 </div>
             </div>
-            <div class="d-flex flex-column col-5">
-                <div class="card text-bg-light m-4 import-detail">
-                    <div class="d-flex justify-content-center">
-                        <span class="fs-5 fw-bold user-select-none">Nhập hàng</span>
+            <template id="ImportForm" class="col-5" style="display: block;">
+                <div class="d-flex flex-column">
+                    <button @click="switchToAddForm" type="button" class="btn btn-success w-100">Thêm thực phẩm</button>
+                    <div class="card text-bg-light m-4 import-detail">
+                        <div class="d-flex justify-content-center">
+                            <span class="fs-5 fw-bold user-select-none">Nhập hàng</span>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <div class="d-flex flex-row flex-nowrap justify-content-between">
+                                <div class="mb-3">
+                                    <label for="ID-input-i" class="form-label">ID</label>
+                                    <input type="text" class="form-control" id="ID-input-i" disabled="true">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="Name-input-i" class="form-label">Tên</label>
+                                    <input type="text" class="form-control" id="Name-input-i" disabled="true">
+                                </div>
+                            </div>
+                            <div class="d-flex flex-row flex-nowrap justify-content-between">
+                                <div class="mb-3">
+                                    <label for="Quantity-input-i" class="form-label">Số lượng</label>
+                                    <input type="number" @input="updateTotal()" class="form-control" id="Quantity-input-i">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="Unit-input-i" class="form-label">Đơn vị tính</label>
+                                    <input type="text" class="form-control" id="Unit-input-i" disabled="true">
+                                </div>
+                            </div>
+                            <div class="d-flex flex-row flex-nowrap justify-content-between">
+                                <div class="mb-3">
+                                    <label for="Price-input" class="form-label">Đơn giá</label>
+                                    <input type="number" @input="updateTotal()" class="form-control" id="Price-input-i">
+                                </div>
+                            </div>
+                            <div class="d-flex flex-row flex-nowrap justify-content-between">
+                                <span class="fs-5">Thuế</span>
+                                <span class="fs-5" id="totalTax">0đ</span>
+                            </div>
+                            <div class="d-flex flex-row flex-nowrap justify-content-between">
+                                <span class="fs-5 fw-bold">Tổng tiền</span>
+                                <span class="fs-5 fw-bold" id="totalPrice">0đ</span>
+                            </div>
+                            <div class="button-group d-flex flex-column gap-2 mt-3">
+                                <div class="d-flex justify-content-center w-100">
+                                    <button @click="insertThucPham" type="button" class="btn btn-success w-100">&larr; Nhập hàng</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="d-flex flex-column">
-                        <div class="d-flex flex-row flex-nowrap justify-content-between">
-                            <div class="mb-3">
-                                <label for="ID-input" class="form-label">ID</label>
-                                <input type="text" class="form-control" id="ID-input-i" disabled="true">
-                            </div>
-                            <div class="mb-3">
-                                <label for="Name-input" class="form-label">Tên</label>
-                                <input type="text" class="form-control" id="Name-input-i" disabled="true">
-                            </div>
+                    <div class="card text-bg-light m-4 export-detail">
+                        <div class="d-flex justify-content-center">
+                            <span class="fs-5 fw-bold user-select-none">Xuất hàng</span>
                         </div>
-                        <div class="d-flex flex-row flex-nowrap justify-content-between">
-                            <div class="mb-3">
-                                <label for="Quantity-input" class="form-label">Số lượng</label>
-                                <input type="number" @input="updateTotal()" class="form-control" id="Quantity-input-i">
+                        <div class="d-flex flex-column">
+                            <div class="d-flex flex-row flex-nowrap justify-content-between">
+                                <div class="mb-3">
+                                    <label for="ID-input-e" class="form-label">ID</label>
+                                    <input type="text" class="form-control" id="ID-input-e" disabled="true">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="Name-input-e" class="form-label">Tên</label>
+                                    <input type="text" class="form-control" id="Name-input-e" disabled="true">
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="Unit-input" class="form-label">Đơn vị tính</label>
-                                <input type="text" class="form-control" id="Unit-input-i" disabled="true">
+                            <div class="d-flex flex-row flex-nowrap justify-content-between">
+                                <div class="mb-3">
+                                    <label for="Quantity-input-e" class="form-label">Số lượng</label>
+                                    <input type="number" class="form-control" id="Quantity-input-e">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="Unit-input-e" class="form-label">Đơn vị tính</label>
+                                    <input type="text" class="form-control" id="Unit-input-e" disabled="true">
+                                </div>
                             </div>
-                        </div>
-                        <div class="d-flex flex-row flex-nowrap justify-content-between">
-                            <div class="mb-3">
-                                <label for="Price-input" class="form-label">Đơn giá</label>
-                                <input type="number" @input="updateTotal()" class="form-control" id="Price-input-i">
-                            </div>
-                        </div>
-                        <div class="d-flex flex-row flex-nowrap justify-content-between">
-                            <span class="fs-5">Thuế</span>
-                            <span class="fs-5" id="totalTax">0đ</span>
-                        </div>
-                        <div class="d-flex flex-row flex-nowrap justify-content-between">
-                            <span class="fs-5 fw-bold">Tổng tiền</span>
-                            <span class="fs-5 fw-bold" id="totalPrice">0đ</span>
-                        </div>
-                        <div class="button-group d-flex flex-column gap-2 mt-3">
-                            <div class="d-flex justify-content-center w-100">
-                                <button @click="insertThucPham" type="button" class="btn btn-success w-100">&larr; Nhập hàng</button>
+                            <div class="button-group d-flex flex-column gap-2">
+                                <div class="d-flex justify-content-center w-100">
+                                    <button @click="removeThucPham()" type="button" class="btn btn-success w-100">&larr; Xuất hàng</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="card text-bg-light m-4 export-detail">
-                    <div class="d-flex justify-content-center">
-                        <span class="fs-5 fw-bold user-select-none">Xuất hàng</span>
-                    </div>
-                    <div class="d-flex flex-column">
-                        <div class="d-flex flex-row flex-nowrap justify-content-between">
-                            <div class="mb-3">
-                                <label for="ID-input" class="form-label">ID</label>
-                                <input type="text" class="form-control" id="ID-input-e" disabled="true">
-                            </div>
-                            <div class="mb-3">
-                                <label for="Name-input" class="form-label">Tên</label>
-                                <input type="text" class="form-control" id="Name-input-e" disabled="true">
-                            </div>
+            </template>
+            <template id="AddForm" class="col-5" style="display: none;">
+                <div class="d-flex flex-column">
+                    <button @click="switchToImportForm" type="button" class="btn btn-success w-100">Nhập/xuất thực phẩm</button>
+                    <div class="card text-bg-light m-4 import-detail">
+                        <div class="d-flex justify-content-center">
+                            <span class="fs-5 fw-bold user-select-none">Thêm thực phẩm mới</span>
                         </div>
-                        <div class="d-flex flex-row flex-nowrap justify-content-between">
-                            <div class="mb-3">
-                                <label for="Quantity-input" class="form-label">Số lượng</label>
-                                <input type="number" class="form-control" id="Quantity-input-e">
+                        <div class="d-flex flex-column">
+                            <div class="d-flex flex-row flex-nowrap justify-content-between">
+                                <div class="mb-3">
+                                    <label for="ID-input-a" class="form-label">ID</label>
+                                    <input type="text" class="form-control" id="ID-input-a">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="Name-input-a" class="form-label">Tên</label>
+                                    <input type="text" class="form-control" id="Name-input-a">
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="Unit-input" class="form-label">Đơn vị tính</label>
-                                <input type="text" class="form-control" id="Unit-input-e" disabled="true">
+                            <div class="d-flex flex-row flex-nowrap justify-content-between">
+                                <div class="mb-3">
+                                    <label for="Unit-input-a" class="form-label">Đơn vị tính</label>
+                                    <input type="text" class="form-control" id="Unit-input-a">
+                                </div>
                             </div>
-                        </div>
-                        <div class="button-group d-flex flex-column gap-2">
-                            <div class="d-flex justify-content-center w-100">
-                                <button @click="removeThucPham()" type="button" class="btn btn-success w-100">&larr; Xuất hàng</button>
+                            <div class="button-group d-flex flex-column gap-2 mt-3">
+                                <div class="d-flex justify-content-center w-100">
+                                    <button @click="addNewThucPham" type="button" class="btn btn-success w-100">&larr; Thêm thực phẩm</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </template>
         </div>
     </div>`
 }

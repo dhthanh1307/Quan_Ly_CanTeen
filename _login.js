@@ -36,7 +36,7 @@ export default{
                         </div>
                         <div id="help" class="form-text text-center mb-5 text-dark">
                             Không có tài khoản?
-                            <a href="" class="text-dark fw-bold"> Đi chỗ khác chơi</a>
+                            <a href="" class="text-dark fw-bold"> Liên hệ 0246813579</a>
                         </div>
                     </div>
                 </div>

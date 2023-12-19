@@ -12,6 +12,8 @@ router.post('/insertHoaDon', controller.thanhtoanHoaDon);
 router.post('/insertThucPham', controller.nhapThucPham);
 router.post('/removeThucPham', controller.xuatThucPham);
 router.post('/searchThucPham', controller.timkiemThucPham);
+router.post('/themMonAn', controller.themMonAn);
+router.post('/themThucPham', controller.themThucPham);
 router.post('/setPortion', controller.nhapChiTieu);
 router.post('/checkPortionSet', controller.kiemtraChiTieu);
 router.post('/createKhachHang', controller.themKhachHang);

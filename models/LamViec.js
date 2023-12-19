@@ -12,5 +12,4 @@ module.exports = class LamViec {
     static async getLamViec () {
         return await db.getLamViec ();
     }
-    
 };
