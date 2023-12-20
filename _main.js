@@ -448,9 +448,9 @@ export default {
 
             window.location.href = '/';
         },
-        async thongkegiolam() {
+        async thongkegiolam(date,option) {
             const url = `http://localhost:3000/giolam`;
-            const res = await fetchGet(url);
+            const res = await fetchPost(url, { Date: date, Type: option });
             this.LamViec = res;
         },
         async createKhachHang(SoDienThoai) {

@@ -355,11 +355,17 @@ module.exports = {
         const insertValues = [username, giolam, ngay];
         await db.none(insertQuery, insertValues);
     },
-    getLamViec: async () => {
-        const query = `SELECT "User"."Name","User"."Username", SUM("LamViec"."Sogio") AS "SoGioLam", EXTRACT(MONTH FROM "LamViec"."Ngay"::date) AS "Thang",EXTRACT(YEAR FROM "LamViec"."Ngay"::date) AS "Nam"
-        FROM "LamViec", "User" WHERE "User"."Username"="LamViec"."Username" 
-        GROUP BY "User"."Name","User"."Username",EXTRACT(MONTH FROM "LamViec"."Ngay"::date),EXTRACT(YEAR FROM "LamViec"."Ngay"::date)`
-        const data = await db.query(query);
+    getLamViec: async (date,type) => {
+        let query = `SELECT "User"."Name","User"."Username", SUM("LamViec"."Sogio") AS "SoGioLam", EXTRACT(MONTH FROM "LamViec"."Ngay"::date) AS "Thang",EXTRACT(YEAR FROM "LamViec"."Ngay"::date) AS "Nam"
+        FROM "LamViec", "User" WHERE "User"."Username"="LamViec"."Username" AND `;
+        if (type === 'month') {
+            query += `EXTRACT(MONTH FROM "LamViec"."Ngay"::date) = EXTRACT(MONTH FROM $1::date)
+                  AND EXTRACT(YEAR FROM "LamViec"."Ngay"::date) = EXTRACT(YEAR FROM $1::date)`;
+        } else if (type === 'year') {
+            query += `EXTRACT(YEAR FROM "LamViec"."Ngay"::date) = EXTRACT(YEAR FROM $1::date)`;
+        }
+        query+=`GROUP BY "User"."Name","User"."Username",EXTRACT(MONTH FROM "LamViec"."Ngay"::date),EXTRACT(YEAR FROM "LamViec"."Ngay"::date)`;
+        const data = await db.any(query,[date]);
         console.log(data)
         return data;
     },

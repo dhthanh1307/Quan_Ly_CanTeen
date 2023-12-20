@@ -217,9 +217,8 @@ module.exports = {
     },
     getWork:async (req, res, next) => {
         try {
-            console.log('thong ke gio lam ');
-            const body = req.body;
-            const result = await LamViec.getLamViec();
+            console.log('thong ke gio lam ',req.body);
+            const result = await LamViec.getLamViec(req.body.Date,req.body.Type);
             res.json(result);
         } catch (err) {
             next(err);

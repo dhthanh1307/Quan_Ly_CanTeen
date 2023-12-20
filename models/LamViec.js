@@ -9,7 +9,7 @@ module.exports = class LamViec {
     static async nhapGioLam (username,giolam,ngay) {
         return await db.nhapGioLam (username,giolam,ngay);
     }
-    static async getLamViec () {
-        return await db.getLamViec ();
+    static async getLamViec (date,type) {
+        return await db.getLamViec (date,type);
     }
 };

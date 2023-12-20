@@ -9,6 +9,8 @@ export default{
             pw2:'',
             create:1,
             admin:false,
+            date:null,
+            option:'',
         }
     },
     methods:{
@@ -45,7 +47,11 @@ export default{
         },
         createStaff(){
             this.create=this.create*-1;
-        }
+        },
+        changeOption(type){
+            this.option=type;
+            console.log(this.option)
+        },
     },
     template:
     `
@@ -81,7 +87,22 @@ export default{
                     <button type="button"  @click="createStaff" class="btn btn-success ">Tạo tài khoản</button>
                 </div>
                 <div class="text-center  ms-3 col-3" >
-                    <button type="button" class="btn btn-success " @click="$emit('thongkegiolam')">Thống kê giờ làm</button>
+                    <button type="button" class="btn btn-success " @click="$emit('thongkegiolam',this.date,this.option)">Thống kê giờ làm</button>
+                    <div  class="w-100" >
+                            <input type="date" class="w-100" id="birthday" v-model="date" name="birthday">
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="report-options"  @click="changeOption('month')" id="report-option-2">
+                        <label class="form-check-label" for="report-option-2">
+                            Tháng
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="report-options"  @click="changeOption('year')" id="report-option-3">
+                        <label class="form-check-label" for="report-option-3">
+                            Năm
+                        </label>
+                    </div>
                 </div>
                 </div>
             </div>
