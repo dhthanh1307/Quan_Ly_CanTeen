@@ -39,6 +39,16 @@ module.exports = {
             next(err);
         }
     },
+    getAllFoodToSell: async (req, res, next) => {
+        try {
+            console.log('all mon an ban');
+            const data = await MonAn.getAllMonAnBan();
+            res.json(data);
+        }
+        catch (err) {
+            next(err);
+        }
+    },
     capnhatMonAn: async (req, res, next) => {
         try {
             console.log('update mon an');
@@ -64,7 +74,7 @@ module.exports = {
             if (chitieu && thucpham) {
                 ktra = true;
                 console.log('thanhtoan');
-                const mabanhang = await HoaDon.nhapHoaDon(body.PhuongThuc, body.SoTien);
+                const mabanhang = await HoaDon.nhapHoaDon(body.PhuongThuc, Math.round(body.SoTien));
                 for (let i = 0; i < body.ListEdit.length; i++)
                     if (body.ListEdit[i].SoLuong > 0)
                         await BanHang.nhapBanHang(mabanhang, body.ListEdit[i], body.GiamGia);

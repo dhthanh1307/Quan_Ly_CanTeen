@@ -4,6 +4,7 @@ const controller = require('../controllers/controller');
 
 router.get('/', controller.render);
 router.get('/getAllMonAn', controller.getAllFood);
+router.get('/getAllMonAnToSell', controller.getAllFoodToSell);
 router.get('/getAllThucPham', controller.getAllGoods);
 router.use('/', express.json());
 router.post('/login', controller.kiemtraTaiKhoan);

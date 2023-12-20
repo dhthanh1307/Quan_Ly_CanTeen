@@ -67,6 +67,7 @@ export default {
         },
         checkSDT() {
             this.$emit('getKhachHang', $('#SDT-input').val());
+            console.log(this.ListMonAn);
         },
         hover(image) {
             this.isHovered = true;
@@ -114,6 +115,7 @@ export default {
                                 <div class="card-body  d-flex flex-column justify-content-evenly text-center">
                                     <span class="fs-6 fw-bold user-select-none">{{ food.TenMonAn }}</span>
                                     <span class="fs-6 fw-bold user-select-none">{{ food.GiaBan }}đ</span>
+                                    <span class="fs-6 fw-bold user-select-none">Còn lại: {{ food.ChiTieu }}</span>
                                 </div>
                             </div>
                         </template>
@@ -133,6 +135,7 @@ export default {
                                 <div class="card-body  d-flex flex-column justify-content-evenly text-center">
                                     <span class="fs-6 fw-bold user-select-none">{{ drink.TenMonAn }}</span>
                                     <span class="fs-6 fw-bold user-select-none">{{ drink.GiaBan }}đ</span>
+                                    <span class="fs-6 fw-bold user-select-none">Còn lại: {{ drink.SoLuongTrongKho }}</span>
                                 </div>
                             </div>
                         </template>
