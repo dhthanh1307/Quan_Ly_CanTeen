@@ -21,6 +21,7 @@ export default{
     },
     methods: {
         getEmptyCongThuc() {
+            console.log(this.ListMonAn[0].CongThuc);
             this.emptyCongThuc = [...this.ListMonAn[0].CongThuc];
             this.emptyCongThuc.forEach(ct => {
                 ct.SoLuongThucPham = 0;
@@ -179,13 +180,13 @@ export default{
                     </div>
                 </div>
             </div>
-            <div id="AddForm" class="card text-bg-light m-4 menu-detail" style="display: block;">
+            <div id="AddForm" class="card text-bg-light m-4 menu-detail" style="display: none;">
                 <div class="d-flex justify-content-center">
                     <span class="fs-5 fw-bold user-select-none">Thêm</span>
                 </div>
                 <div class="d-flex flex-column">
                     <div class="mb-3">
-                        <label for="ID-add" class="form-label">ID</label>
+                        <label for="ID-add" class="form-label">ID <span style="color: red;">*Phải bắt đầu bằng kí tự 'C'</span></label>
                         <input type="text" class="form-control" id="ID-add">
                     </div>
                     <div class="mb-3">

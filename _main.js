@@ -9,6 +9,8 @@ class DisplayMonAn {
         this.HanSuDung = MonAn.HanSuDung;
         this.SoLuong = MonAn.SoLuong;
         this.CongThuc = MonAn.CongThuc;
+        this.ChiTieu = MonAn.ChiTieu;
+        this.SoLuongTrongKho = MonAn.SoLuongTrongKho;
     }
 };
 
@@ -59,6 +61,18 @@ async function fetchPost(url, obj) {
 
 async function fetchGetAllMonAn() {
     const url = "http://localhost:3000/getAllMonAn";
+    const json = await fetchGet(url);
+    //console.log(json);
+    //const jsonArray = json.data ?? [];
+    return {
+        displayArray: json.map((MonAn) => {
+            return MonAn;
+        })
+    };
+}
+
+async function fetchGetAllMonAnToSell() {
+    const url = "http://localhost:3000/getAllMonAnToSell";
     const json = await fetchGet(url);
     //console.log(json);
     //const jsonArray = json.data ?? [];
@@ -235,12 +249,12 @@ export default {
             const date = `${current.getFullYear()}-${current.getMonth() + 1}-${current.getDate()}`;
             return date;
         },
-        changePage(page) {
+        async changePage(page) {
             this.comName = page;
             if (this.comName == 'vcsell') {
                 this.loading = true;
                 try {
-                    this.reloadMonAn();
+                    await this.reloadMonAnToSell();
                 }
                 catch (error) {
                     console.log(error);
@@ -252,13 +266,18 @@ export default {
             this.ListMonAn = res.displayArray;
             this.loading = false;
             //console.log(this.ListMonAn);
-
+        },
+        async reloadMonAnToSell() {
+            const res = await fetchGetAllMonAnToSell();
+            this.ListMonAn = res.displayArray;
+            this.loading = false;
+            //console.log(this.ListMonAn);
         },
         async changeToMenu() {
             this.comName = 'vcmenu';
             this.loading = true;
             try {
-                this.reloadMonAn();
+                await this.reloadMonAn();
             }
             catch (error) {
                 console.log(error);
@@ -278,6 +297,7 @@ export default {
                     await fetchUpdateKhachHang(SoDienThoai, TichLuy, GiamGia, result);
                     await this.getKhachHang(SoDienThoai);
                 }
+                await this.reloadMonAnToSell();
             }
             return json;
         },
@@ -294,7 +314,7 @@ export default {
         async updateItem(ID, Name, Price, newCongThuc) {
             try {
                 const res = await fetchUpdateMonAn(ID, Name, Price, newCongThuc);
-                this.reloadMonAn();
+                await this.reloadMonAn();
             } catch (error) {
                 console.log(error);
             }
@@ -309,7 +329,7 @@ export default {
             this.comName = 'vcimport';
             this.loading = true;
             try {
-                this.reloadThucPham();
+                await this.reloadThucPham();
             }
             catch (error) {
                 console.log(error);
@@ -340,7 +360,7 @@ export default {
             try {
                 let NgayNhap = this.currentDate();
                 const res = await fetchInsertThucPham(MaThucPham, SoLuongNhap, NgayNhap, GiaNhap);
-                this.reloadThucPham();
+                await this.reloadThucPham();
             } catch (error) {
                 console.log(error);
             }
@@ -348,7 +368,7 @@ export default {
         async removeThucPham(MaThucPham, SoLuong) {
             try {
                 const res = await fetchRemoveThucPham(MaThucPham, SoLuong);
-                this.reloadThucPham();
+                await this.reloadThucPham();
             }
             catch (error) {
                 console.log(error);
@@ -366,7 +386,7 @@ export default {
         async addMonAn(MaMonAn, TenMonAn, GiaBan, HanSuDung, HinhAnh, newCongThuc) {
             try {
                 await fetchAddMonAn(MaMonAn, TenMonAn, GiaBan, HanSuDung, HinhAnh, newCongThuc);
-                this.reloadMonAn();
+                await this.reloadMonAn();
             }
             catch (e) {
                 console.log(e);
@@ -375,7 +395,7 @@ export default {
         async addThucPham(MaThucPham, TenThucPham, DonViTinh) {
             try {
                 await fetchAddThucPham(MaThucPham, TenThucPham, DonViTinh);
-                this.reloadThucPham();
+                await this.reloadThucPham();
             }
             catch (e) {
                 console.log(e);
@@ -407,7 +427,7 @@ export default {
             this.loading = true;
             try {
                 await this.resetPortionCheck();
-                await this.reloadMonAn();
+                await this.reloadMonAnToSell();
             }
             catch (error) {
                 console.log(error);

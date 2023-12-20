@@ -28,39 +28,40 @@ module.exports = {
         try {
             dbcn = await db.connect();
             const data = await dbcn.any(`
-            SELECT "MonAn".*, json_agg(json_build_object('MaThucPham', "ThucPham"."MaThucPham", 'TenThucPham', "ThucPham"."TenThucPham", 'SoLuongThucPham', COALESCE("CongThuc"."SoLuongThucPham", 0))) as "CongThuc"
-            FROM "MonAn"
-                CROSS JOIN "ThucPham"
-                LEFT JOIN "CongThuc" ON "MonAn"."MaMonAn" = "CongThuc"."MaMonAn" AND "ThucPham"."MaThucPham" = "CongThuc"."MaThucPham"
-            GROUP BY "MonAn"."MaMonAn"
-            ORDER BY "MonAn"."MaMonAn" ASC
-        `);
-            // const data = await dbcn.any(`
-            //     SELECT "MonAn".*, json_agg(json_build_object('MaThucPham', "CongThuc"."MaThucPham", 'TenThucPham', "ThucPham"."TenThucPham", 'SoLuongThucPham', "CongThuc"."SoLuongThucPham")) as "CongThuc"
-            //     FROM "MonAn"
-            //         LEFT JOIN "CongThuc" ON "MonAn"."MaMonAn" = "CongThuc"."MaMonAn"
-            //         LEFT JOIN "ThucPham" ON "CongThuc"."MaThucPham" = "ThucPham"."MaThucPham"
-            //     GROUP BY "MonAn"."MaMonAn"
-            //     ORDER BY "MonAn"."MaMonAn" ASC
-            // `);
-            //console.log(data[5]);
+                SELECT "MonAn".*, json_agg(json_build_object('MaThucPham', "ThucPham"."MaThucPham", 'TenThucPham', "ThucPham"."TenThucPham", 'SoLuongThucPham', COALESCE("CongThuc"."SoLuongThucPham", 0))) as "CongThuc"
+                FROM "MonAn"
+                    CROSS JOIN "ThucPham"
+                    LEFT JOIN "CongThuc" ON "MonAn"."MaMonAn" = "CongThuc"."MaMonAn" AND "ThucPham"."MaThucPham" = "CongThuc"."MaThucPham"
+                GROUP BY "MonAn"."MaMonAn"
+                ORDER BY "MonAn"."MaMonAn" ASC
+            `);
             return data;
         } catch (error) {
             throw error;
         } finally {
             dbcn.done();
         }
-        // let dbcn = null;
-        // try {
-        //     dbcn = await db.connect();
-        //     const data = await dbcn.any(`SELECT * FROM "MonAn" ORDER BY "MaMonAn" ASC`);
-        //     //return data.map(dbMonAn => new MonAn(dbMonAn));
-        //     return data;
-        // } catch (error) {
-        //     throw error;
-        // } finally {
-        //     dbcn.done();
-        // }
+    },
+    getAllMonAnToSell: async () => {
+        let dbcn = null;
+        try {
+            dbcn = await db.connect();
+            const data = await dbcn.any(`
+                SELECT "MonAn".*, 
+                    COALESCE(MAX(CASE WHEN "ChiTieu"."Ngay" = CURRENT_DATE THEN "ChiTieu"."SoLuong" ELSE 0 END), 0) as "ChiTieu",
+                    COALESCE(MAX("ThucPham"."SoLuongTrongKho"), 0) as "SoLuongTrongKho"
+                FROM "MonAn"
+                    LEFT JOIN "ThucPham" ON "MonAn"."MaMonAn" = "ThucPham"."MaThucPham"
+                    LEFT JOIN "ChiTieu" ON "MonAn"."MaMonAn" = "ChiTieu"."MaMonAn"
+                GROUP BY "MonAn"."MaMonAn"
+                ORDER BY "MonAn"."MaMonAn" ASC
+            `);
+            return data;
+        } catch (error) {
+            throw error;
+        } finally {
+            dbcn.done();
+        }
     },
     checkChiTieu: async (listmonan) => {
         let dbcn = null;
