@@ -207,7 +207,8 @@ export default {
             SoDienThoai: null,
             TichLuy: 0,
             GiamGia: 0,
-            isValidKhachHang: false
+            isValidKhachHang: false,
+            NhapHang:[],
         }
     },
     components: {
@@ -223,7 +224,8 @@ export default {
             isPortionSet: computed(() => this.isPortionSet),
             SoDienThoai: computed(() => this.SoDienThoai),
             TichLuy: computed(() => this.TichLuy),
-            GiamGia: computed(() => this.GiamGia)
+            GiamGia: computed(() => this.GiamGia),
+            NhapHang: computed(() => this.NhapHang),
         }
     },
     methods: {
@@ -307,6 +309,16 @@ export default {
                 const json = await fetchPost(url, { Date: date, Type: option });
                 this.DoanhThu = json;
                 console.log(this.DoanhThu);
+            } catch (error) {
+                console.error('Error during thongke API call:', error);
+            }
+        },
+        async nhaphang(date, option) {
+            try {
+                const url = `http://localhost:3000/getNhapHang`;
+                const json = await fetchPost(url, { Date: date, Type: option });
+                this.NhapHang = json;
+                console.log(this.NhapHang);
             } catch (error) {
                 console.error('Error during thongke API call:', error);
             }
@@ -526,7 +538,7 @@ export default {
             <div class="row w-100">                  
                 <component v-if="!loading" @change-page="changePage" @thanh-toan="thanhtoan" @thongKe="thongke" 
                 @removeStaff="removeStaff" @insert-staff="insertStaff" 
-                @change-menu="changeToMenu" @change-import="changeToImport" 
+                @change-menu="changeToMenu" @change-import="changeToImport" @nhaphang="nhaphang"
                 @update-item="updateItem" @insert-thuc-pham="insertThucPham" 
                 @remove-thuc-pham="removeThucPham" @search-thuc-pham="searchThucPham" 
                 @set-portion="setPortion" @check-portion-set="checkPortionSet"

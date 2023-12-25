@@ -7,6 +7,7 @@ const KhachHang = require('../models/KhachHang');
 const HoaDon = require('../models/HoaDon');
 const LamViec = require('../models/LamViec');
 const BanHang = require('../models/BanHang');
+const NhapHang = require('../models/NhapHang');
 
 
 module.exports = {
@@ -179,6 +180,17 @@ module.exports = {
             console.log('thong ke doanh thu ');
             const body = req.body;
             const result = await DoanhThu.thongKeDoanhThu(body.Date, body.Type);
+            console.log(result);
+            res.json(result);
+        } catch (err) {
+            next(err);
+        }
+    },
+    thongKeNhap: async (req, res, next) => {
+        try {
+            console.log('thong ke tien nhap kho ');
+            const body = req.body;
+            const result = await NhapHang.thongKeNhap(body.Date, body.Type);
             console.log(result);
             res.json(result);
         } catch (err) {

@@ -23,6 +23,7 @@ router.post('/updateKhachHang', controller.capNhatKhachHang);
 
 router.post('/removeStaff', controller.xoaNhanSu);
 router.post('/thongke', controller.thongKeDoanhThu);
+router.post('/getNhapHang', controller.thongKeNhap);
 router.get('/nhansu', controller.getStaff);
 router.post('/giolam', controller.getWork);
 router.post('/insertStaff', controller.themNhanSu);

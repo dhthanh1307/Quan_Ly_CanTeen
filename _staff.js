@@ -113,9 +113,9 @@ export default{
                 <h5 class="pt-2">Họ tên</h5>
                 <input id="name" v-model="name" type="text" class="form-control" placeholder="Nhập tài khoản" aria-label="Name" aria-describedby="addon-wrapping">
                 <h5 class="pt-2">Mật khẩu</h5>
-                <input id="pw1" type="text" v-model="pw1" class="form-control" placeholder="Nhập mật khẩu" aria-label="Username" aria-describedby="addon-wrapping">
+                <input id="pw1" type="password" v-model="pw1" class="form-control" placeholder="Nhập mật khẩu" aria-label="Username" aria-describedby="addon-wrapping">
                 <h5 class="pt-2">Nhập lại mật khẩu</h5>
-                <input id="pw2" type="text" v-model="pw2" class="form-control" placeholder="Nhập lại mật khẩu" aria-label="Username" aria-describedby="addon-wrapping">
+                <input id="pw2" type="password" v-model="pw2" class="form-control" placeholder="Nhập lại mật khẩu" aria-label="Username" aria-describedby="addon-wrapping">
                 <div class="d-flex pt-4">
                     <input class="form-check-input" v-model="admin" type="checkbox">
                         <label class="form-check-label">

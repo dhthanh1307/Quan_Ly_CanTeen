@@ -397,4 +397,47 @@ module.exports = {
         const updateValues = [newTichLuy, newGiamGia, SoDienThoai];
         await db.query(updateQuery, updateValues);
     },
+    thongKeNhap: async (Date, type) => {
+        let dbcn = null;
+        try {
+            dbcn = await db.connect();
+            let query = `
+            SELECT
+                "ThucPham"."MaThucPham",
+                "ThucPham"."TenThucPham",
+                "NhapHang"."GiaNhap",
+                "ThucPham"."DonViTinh",
+                SUM("NhapHang"."SoLuongNhap") AS "SoLuong",
+                SUM("NhapHang"."SoLuongNhap" * "NhapHang"."GiaNhap") AS "ThanhTien"
+            FROM
+                "NhapHang"
+            JOIN
+                "ThucPham" ON "NhapHang"."MaThucPham" = "ThucPham"."MaThucPham"
+            WHERE
+        `;
+
+
+            if (type === 'date') {
+                query += `"NhapHang"."NgayNhap" = $1`;
+            } else if (type === 'month') {
+                query += `EXTRACT(MONTH FROM "NhapHang"."NgayNhap"::date) = EXTRACT(MONTH FROM $1::date)
+                      AND EXTRACT(YEAR FROM "NhapHang"."NgayNhap"::date) = EXTRACT(YEAR FROM $1::date)`;
+            } else if (type === 'year') {
+                query += `EXTRACT(YEAR FROM "NhapHang"."NgayNhap"::date) = EXTRACT(YEAR FROM $1::date)`;
+            }
+
+            query += `
+            GROUP BY
+                "ThucPham"."MaThucPham", "ThucPham"."TenThucPham", "ThucPham"."DonViTinh","NhapHang"."GiaNhap";
+        `;
+
+            const data = await dbcn.any(query, [Date]);
+            //return data.map(dbDoanhThu => new DoanhThu(dbDoanhThu));
+            return data;
+        } catch (error) {
+            throw error;
+        } finally {
+            dbcn.done();
+        }
+    },
 }
