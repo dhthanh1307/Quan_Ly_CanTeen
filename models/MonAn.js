@@ -12,8 +12,8 @@ module.exports = class MonAn {
         this.ChiTieu = rawMonAn.ChiTieu;
         this.SoLuongTrongKho = rawMonAn.SoLuongTrongKho;
     }
-    static async themMonAn(MaMonAn, TenMonAn, GiaBan, HanSuDung, HinhAnh, newCongThuc) {
-        await db.themMonAn(MaMonAn, TenMonAn, GiaBan, HanSuDung, HinhAnh, newCongThuc);
+    static async themMonAn(MaMonAn, TenMonAn, GiaBan, HinhAnh, newCongThuc) {
+        await db.themMonAn(MaMonAn, TenMonAn, GiaBan, HinhAnh, newCongThuc);
     }
     static async getAllMonAn() {
         return await db.getAllMonAn();

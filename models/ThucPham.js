@@ -13,12 +13,6 @@ module.exports = class ThucPham {
     static async getThucPham() {
         return await db.getAllThucPham();
     }
-    static async nhapThucPham(MaThucPham, SoLuongNhap, NgayNhap, GiaNhap) {
-        return await db.nhapThucPham(MaThucPham, SoLuongNhap, NgayNhap, GiaNhap);
-    }
-    static async xuatThucPham(MaThucPham, SoLuong) {
-        return await db.xuatThucPham(MaThucPham, SoLuong);
-    }
     static async timkiemThucPham(Keyword) {
         return await db.timkiemThucPham(Keyword);
     }

@@ -12,6 +12,7 @@ export default{
                 HCMUS’s Cafeteria
             </span>
             <form class="d-flex" role="search">
+            <button @click="$emit('changeDiscount')" type="button" class="btn btn-success me-4">Khuyến mãi</button>
             <button @click="$emit('changeMenu')" type="button" class="btn btn-success me-4">Menu</button>
             <button @click="$emit('changePage', 'vcreport')" type="button" class="btn btn-success me-4">Báo cáo</button>
             <button @click="$emit('changeImport')" type="button" class="btn btn-success me-4">Kho hàng</button>

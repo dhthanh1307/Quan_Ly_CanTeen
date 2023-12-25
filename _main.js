@@ -130,9 +130,9 @@ async function fetchSearchThucPham(Keyword) {
     };
 }
 
-async function fetchAddMonAn(MaMonAn, TenMonAn, GiaBan, HanSuDung, HinhAnh, newCongThuc) {
+async function fetchAddMonAn(MaMonAn, TenMonAn, GiaBan, HinhAnh, newCongThuc) {
     const url = `http://localhost:3000/themMonAn`;
-    const json = await fetchPost(url, { MaMonAn: MaMonAn, TenMonAn: TenMonAn, GiaBan: GiaBan, HanSuDung: HanSuDung, HinhAnh: HinhAnh, newCongThuc: newCongThuc });
+    const json = await fetchPost(url, { MaMonAn: MaMonAn, TenMonAn: TenMonAn, GiaBan: GiaBan, HinhAnh: HinhAnh, newCongThuc: newCongThuc });
     return json;
 }
 
@@ -172,6 +172,18 @@ async function fetchUpdateKhachHang(SoDienThoai, TichLuy, GiamGia, ThanhToan) {
     return json;
 }
 
+async function fetchGetKhuyenMai() {
+    const url = "http://localhost:3000/layKhuyenMai";
+    const json = await fetchGet(url);
+    return json
+}
+
+async function fetchUpdateKhuyenMai(MocKhuyenMai, GiaTriKhuyenMai, GioiHanKhuyenMai) {
+    const url = `http://localhost:3000/capNhatKhuyenMai`;
+    const json = await fetchPost(url, { MocKhuyenMai: MocKhuyenMai, GiaTriKhuyenMai: GiaTriKhuyenMai, GioiHanKhuyenMai: GioiHanKhuyenMai });
+    return json;
+}
+
 import { computed, watch, } from 'vue'
 import vclogin from './_login.js'
 import vcnav from './_nav.js'
@@ -184,7 +196,7 @@ import vcimport from './_import.js'
 import vcsell from './_sell.js'
 import vcstaff from './_staff.js'
 import vcserving from './_serving.js'
-
+import vcdiscount from './_discount.js'
 
 export default {
     data() {
@@ -209,10 +221,11 @@ export default {
             GiamGia: 0,
             isValidKhachHang: false,
             NhapHang:[],
+            KhuyenMai: {}
         }
     },
     components: {
-        vclogin, vcnav, vccontent, vcinfo, vcfooter, vcreport, vcmenu, vcimport, vcsell, vcstaff, vcserving
+        vclogin, vcnav, vccontent, vcinfo, vcfooter, vcreport, vcmenu, vcimport, vcsell, vcstaff, vcserving, vcdiscount
     },
     provide() {
         return {
@@ -226,6 +239,7 @@ export default {
             TichLuy: computed(() => this.TichLuy),
             GiamGia: computed(() => this.GiamGia),
             NhapHang: computed(() => this.NhapHang),
+            KhuyenMai: computed(() => this.KhuyenMai)
         }
     },
     methods: {
@@ -395,9 +409,9 @@ export default {
                 console.log(e);
             }
         },
-        async addMonAn(MaMonAn, TenMonAn, GiaBan, HanSuDung, HinhAnh, newCongThuc) {
+        async addMonAn(MaMonAn, TenMonAn, GiaBan, HinhAnh, newCongThuc) {
             try {
-                await fetchAddMonAn(MaMonAn, TenMonAn, GiaBan, HanSuDung, HinhAnh, newCongThuc);
+                await fetchAddMonAn(MaMonAn, TenMonAn, GiaBan, HinhAnh, newCongThuc);
                 await this.reloadMonAn();
             }
             catch (e) {
@@ -522,6 +536,24 @@ export default {
             this.GiamGia = 0;
             this.isValidKhachHang = false;
             //console.log(this.SoDienThoai + ", TichLuy: " + this.TichLuy + ", GiamGia: " + this.GiamGia);
+        },
+        async changeToDiscount() {
+            this.comName = 'vcdiscount';
+            this.loading = true;
+            try {
+                this.KhuyenMai = await fetchGetKhuyenMai();
+                this.loading = false;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        },
+        async updateDiscount(MocKhuyenMai, GiaTriKhuyenMai, GioiHanKhuyenMai) {
+            try {
+                await fetchUpdateKhuyenMai(MocKhuyenMai, GiaTriKhuyenMai, GioiHanKhuyenMai);
+            } catch (error) {
+                console.log(error);
+            }
         }
     },
     template:
@@ -530,6 +562,7 @@ export default {
             <div class="row mt-4">
                 <vcnav @change-page="changePage" @change-menu="changeToMenu" @change-import="changeToImport" 
                  @change-staff="changeToStaff" @change-serving="changeToServing"
+                 @change-discount="changeToDiscount"
                  @logOut="logOut" />
             </div>
 
@@ -544,6 +577,7 @@ export default {
                 @set-portion="setPortion" @check-portion-set="checkPortionSet"
                 @get-khach-hang="getKhachHang" @reset-khach-hang="resetKhachHang"
                 @thongkegiolam="thongkegiolam" @add-thuc-pham="addThucPham" @add-mon-an="addMonAn"
+                @update-discount="updateDiscount"
                 @create-khach-hang="createKhachHang" @reset-portion-check="resetPortionCheck" :is="comName"/>
                 <component v-else :is="comName"/>                                   
             </div>

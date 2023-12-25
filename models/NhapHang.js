@@ -12,4 +12,10 @@ module.exports = class NhapHang {
     static async thongKeNhap(Date, Type) {
         return await db.thongKeNhap(Date, Type);
     }
+    static async nhapThucPham(MaThucPham, SoLuongNhap, NgayNhap, GiaNhap) {
+        return await db.nhapThucPham(MaThucPham, SoLuongNhap, NgayNhap, GiaNhap);
+    }
+    static async xuatThucPham(MaThucPham, SoLuong) {
+        return await db.xuatThucPham(MaThucPham, SoLuong);
+    }
 };

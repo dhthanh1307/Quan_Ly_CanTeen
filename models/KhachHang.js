@@ -15,4 +15,13 @@ module.exports = class KhachHang {
     static async capNhatKhachHang(SoDienThoai, newTichLuy, newGiamGia) {
         await db.capNhatKhachHang(SoDienThoai, newTichLuy, newGiamGia);
     }
+    static async layKhuyenMai() {
+        return await db.layKhuyenMai();
+    }
+    static async capNhatKhuyenMai(MocKhuyenMai, GiaTriKhuyenMai, GioiHanKhuyenMai) {
+        await db.capNhatKhuyenMai(MocKhuyenMai, GiaTriKhuyenMai, GioiHanKhuyenMai);
+    }
+    static async capNhatGiamGia(MocKhuyenMai, GiaTriKhuyenMai, GioiHanKhuyenMai) {
+        return await db.capNhatGiamGia(MocKhuyenMai, GiaTriKhuyenMai, GioiHanKhuyenMai);
+    }
 };

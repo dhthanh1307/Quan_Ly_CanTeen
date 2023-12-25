@@ -75,7 +75,7 @@ export default{
             this.add = false;
         },
         addNewMonAn() {
-            if ($('#ID-add').val().trim() !== '' && $("#Name-add").val().trim() !== '' && $("#Price-add").val().trim() !== '' && $("#Date-add").val().trim() !== '' && $("#Image-add").val().trim() !== '') {
+            if ($('#ID-add').val().trim() !== '' && $("#Name-add").val().trim() !== '' && $("#Price-add").val().trim() !== '' && $("#Image-add").val().trim() !== '') {
                 const newCongThuc = this.emptyCongThuc.map(ct => {
                     const inputField = $(`#${ct.MaThucPham}-add`);
                     return {
@@ -83,7 +83,7 @@ export default{
                         SoLuongThucPham: inputField ? inputField.val() : null,
                     };
                 });
-                this.$emit('addMonAn', $('#ID-add').val(), $('#Name-add').val(), $('#Price-add').val(), $('#Date-add').val(), $('#Image-add').val(), newCongThuc);
+                this.$emit('addMonAn', "C_" + ($('#ID-add').val()).toString(), $('#Name-add').val(), $('#Price-add').val(), $('#Image-add').val(), newCongThuc);
                 this.getEmptyCongThuc();
             }
         }
@@ -161,10 +161,11 @@ export default{
                         </div>
                         <div class="mb-3" style="max-height: 400px !important; overflow: auto !important;">
                             <template v-for="ct in this.CongThuc">
-                                <template v-if="ct.MaThucPham.startsWith('GV_') || ct.MaThucPham.startsWith('HS_') || ct.MaThucPham.startsWith('LT_') || ct.MaThucPham.startsWith('RC_') || ct.MaThucPham.startsWith('TPS_') || ct.MaThucPham.startsWith('TR_')">
+                                <template v-if="ct.MaThucPham.startsWith('GV_') || ct.MaThucPham.startsWith('HS_') || ct.MaThucPham.startsWith('LT_') || ct.MaThucPham.startsWith('RC_') || ct.MaThucPham.startsWith('TPS_') || ct.MaThucPham.startsWith('TR_') || ct.MaThucPham.startsWith('T_')">
                                     <div class="d-flex flex-row mb-3">
                                         <label :for="ct.MaThucPham + '-input'" style="margin-top: 5px;" class="form-label text-center w-50">{{ ct.TenThucPham }}</label>
-                                        <input type="number" v-model="ct.SoLuongThucPham" class="form-control w-50" :id="ct.MaThucPham + '-input'">
+                                        <input type="number" v-model="ct.SoLuongThucPham" class="form-control w-25" :id="ct.MaThucPham + '-input'">
+                                        <label style="margin-top: 5px;" class="form-label text-center w-25">{{ ct.DonViTinh }}</label>
                                     </div>
                                 </template>
                             </template>
@@ -186,7 +187,7 @@ export default{
                 </div>
                 <div class="d-flex flex-column">
                     <div class="mb-3">
-                        <label for="ID-add" class="form-label">ID <span style="color: red;">*Phải bắt đầu bằng kí tự 'C'</span></label>
+                        <label for="ID-add" class="form-label">ID</label>
                         <input type="text" class="form-control" id="ID-add">
                     </div>
                     <div class="mb-3">
@@ -198,10 +199,6 @@ export default{
                         <input type="number" class="form-control" id="Price-add">
                     </div>
                     <div class="mb-3">
-                        <label for="Date-add" class="form-label">Ngày hết hạn</label>
-                        <input type="date" class="form-control" id="Date-add">
-                    </div>
-                    <div class="mb-3">
                         <label for="Image-add" class="form-label">Đường dẫn ảnh</label>
                         <input type="text" class="form-control" id="Image-add">
                     </div>
@@ -211,10 +208,11 @@ export default{
                         </div>
                         <div class="mb-3" style="max-height: 400px !important; overflow: auto !important;">
                             <template v-for="ct in this.emptyCongThuc">
-                                <template v-if="ct.MaThucPham.startsWith('GV_') || ct.MaThucPham.startsWith('HS_') || ct.MaThucPham.startsWith('LT_') || ct.MaThucPham.startsWith('RC_') || ct.MaThucPham.startsWith('TPS_') || ct.MaThucPham.startsWith('TR_')">
+                                <template v-if="ct.MaThucPham.startsWith('GV_') || ct.MaThucPham.startsWith('HS_') || ct.MaThucPham.startsWith('LT_') || ct.MaThucPham.startsWith('RC_') || ct.MaThucPham.startsWith('TPS_') || ct.MaThucPham.startsWith('TR_') || ct.MaThucPham.startsWith('T_')">
                                     <div class="d-flex flex-row mb-3">
                                         <label :for="ct.MaThucPham + '-add'" style="margin-top: 5px;" class="form-label text-center w-50">{{ ct.TenThucPham }}</label>
-                                        <input type="number" v-model="ct.SoLuongThucPham" class="form-control w-50" :id="ct.MaThucPham + '-add'">
+                                        <input type="number" v-model="ct.SoLuongThucPham" class="form-control w-25" :id="ct.MaThucPham + '-add'">
+                                        <label style="margin-top: 5px;" class="form-label text-center w-25">{{ ct.DonViTinh }}</label>
                                     </div>
                                 </template>
                             </template>

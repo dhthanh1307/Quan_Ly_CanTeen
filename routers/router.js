@@ -28,5 +28,7 @@ router.get('/nhansu', controller.getStaff);
 router.post('/giolam', controller.getWork);
 router.post('/insertStaff', controller.themNhanSu);
 router.post('/insertGioLam', controller.nhapGioLam);
+router.get('/layKhuyenMai', controller.layKhuyenMai);
+router.post('/capNhatKhuyenMai', controller.capNhatKhuyenMai);
 
 module.exports = router;

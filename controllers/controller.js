@@ -103,7 +103,7 @@ module.exports = {
         try {
             console.log('insert thuc pham');
             const body = req.body;
-            const result = await ThucPham.nhapThucPham(body.MaThucPham, body.SoLuongNhap, body.NgayNhap, body.GiaNhap);
+            const result = await NhapHang.nhapThucPham(body.MaThucPham, body.SoLuongNhap, body.NgayNhap, body.GiaNhap);
             res.json({});
         }
         catch (err) {
@@ -114,7 +114,7 @@ module.exports = {
         try {
             console.log('remove thuc pham');
             const body = req.body;
-            const result = await ThucPham.xuatThucPham(body.MaThucPham, body.SoLuong);
+            const result = await NhapHang.xuatThucPham(body.MaThucPham, body.SoLuong);
             res.json({});
         }
         catch (err) {
@@ -136,7 +136,7 @@ module.exports = {
         try {
             const body = req.body;
             console.log('them mon an: ' + body.MaMonAn);
-            await MonAn.themMonAn(body.MaMonAn, body.TenMonAn, body.GiaBan, body.HanSuDung, body.HinhAnh, body.newCongThuc);
+            await MonAn.themMonAn(body.MaMonAn, body.TenMonAn, body.GiaBan, body.HinhAnh, body.newCongThuc);
             res.json({});
         }
         catch(e){
@@ -270,22 +270,11 @@ module.exports = {
         try {
             const body = req.body;
             const data = await KhachHang.timkiemKhachHang(body.SoDienThoai);
+            const KM = await KhachHang.layKhuyenMai();
             const newTichLuy = data.TichLuy + body.ThanhToan;
-            let newGiamGia = 0;
-            if (newTichLuy < 100000) {
-                newGiamGia = 0;
-            }
-            else if (newTichLuy >= 100000 && newTichLuy < 300000) {
-                newGiamGia = 0.03;
-            }
-            else if (newTichLuy >= 300000 && newTichLuy < 500000) {
-                newGiamGia = 0.05;
-            }
-            else if (newTichLuy >= 500000 && newTichLuy < 1000000) {
-                newGiamGia = 0.07;
-            }
-            else newGiamGia = 1;
-            console.log(newTichLuy)
+            let newGiamGia = Math.min(Math.floor(newTichLuy / KM.MocKhuyenMai) * KM.GiaTriKhuyenMai, KM.GioiHanKhuyenMai);
+            console.log(newTichLuy);
+            console.log(newGiamGia);
             await KhachHang.capNhatKhachHang(body.SoDienThoai, newTichLuy, newGiamGia);
             res.json({});
         }
@@ -293,4 +282,24 @@ module.exports = {
             console.log(e);
         }
     },
+    layKhuyenMai: async (req, res, next) => {
+        try {
+            const KM = await KhachHang.layKhuyenMai();
+            res.json(KM);
+        }
+        catch(e){
+            console.log(e);
+        }
+    },
+    capNhatKhuyenMai: async (req, res, next) => {
+        try {
+            const body = req.body;
+            await KhachHang.capNhatKhuyenMai(body.MocKhuyenMai, body.GiaTriKhuyenMai, body.GioiHanKhuyenMai);
+            await KhachHang.capNhatGiamGia(body.MocKhuyenMai, body.GiaTriKhuyenMai, body.GioiHanKhuyenMai);
+            res.json({});
+        }
+        catch(e){
+            console.log(e);
+        }
+    }
 }

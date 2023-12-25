@@ -2,11 +2,12 @@ export default{
     inject: ['ListMonAn', 'isPortionSet', 'portionAmount'],
     data(){
         return {
-          
             currentDate: new Date().toLocaleDateString(),
             selectedId: null, 
-             isHovered:false,
+            isHovered:false,
             hoveredImage:null,
+            displayPortion: 0,
+            displayName: null
         }
     },
     computed: {
@@ -39,6 +40,8 @@ export default{
         setPortion() {
             if (this.selectedId != null) {
                 this.$emit('setPortion', $('#ID-input').val(), $('#Portion-input').val());
+                this.displayPortion = 0;
+                this.displayName = null;
             }
         },
         alertAlreadySet() {
@@ -51,6 +54,13 @@ export default{
         unhover() {
             this.isHovered = false;
             this.hoveredImage = null;
+        },
+        confirmBox() {
+            this.displayPortion = $('#Portion-input').val();
+            this.displayName = $('#Name-input').val();
+            var modalElement = document.getElementById('myModal');
+            var modalInstance = new bootstrap.Modal(modalElement, {keyboard: false});
+            modalInstance.show();
         }
     },
     template:
@@ -100,7 +110,7 @@ export default{
                     <div class="button-group d-flex flex-column gap-2">
                         <template v-if="!this.isPortionSet">
                             <div class="d-flex justify-content-center w-100">
-                                <button @click="setPortion()" type="button" class="btn btn-success w-100">&larr; Xác nhận</button>
+                                <button @click="confirmBox()" type="button" class="btn btn-success w-100">&larr; Xác nhận</button>
                             </div>
                         </template>
                         <template v-else>
@@ -112,5 +122,24 @@ export default{
                 </div>
             </div>
         </div>
+
+        <div id="myModal" class="modal" tabindex="-1">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">Xác nhận thiết lập chỉ tiêu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                <p>Thiết lập chỉ tiêu <span style="color: red;"><b>{{ this.displayPortion }}</b></span> cho món ăn <span style="color: green;"><b>{{ this.displayName }}</b></span></p>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button @click="setPortion()" type="button" class="btn btn-primary" data-bs-dismiss="modal">Xác nhận</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
     </div>`
 }

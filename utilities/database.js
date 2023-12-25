@@ -28,7 +28,7 @@ module.exports = {
         try {
             dbcn = await db.connect();
             const data = await dbcn.any(`
-                SELECT "MonAn".*, json_agg(json_build_object('MaThucPham', "ThucPham"."MaThucPham", 'TenThucPham', "ThucPham"."TenThucPham", 'SoLuongThucPham', COALESCE("CongThuc"."SoLuongThucPham", 0))) as "CongThuc"
+                SELECT "MonAn".*, json_agg(json_build_object('MaThucPham', "ThucPham"."MaThucPham", 'TenThucPham', "ThucPham"."TenThucPham", 'DonViTinh', "ThucPham"."DonViTinh", 'SoLuongThucPham', COALESCE("CongThuc"."SoLuongThucPham", 0))) as "CongThuc"
                 FROM "MonAn"
                     CROSS JOIN "ThucPham"
                     LEFT JOIN "CongThuc" ON "MonAn"."MaMonAn" = "CongThuc"."MaMonAn" AND "ThucPham"."MaThucPham" = "CongThuc"."MaThucPham"
@@ -276,9 +276,9 @@ module.exports = {
             dbcn.done();
         }
     },
-    themMonAn: async (MaMonAn, TenMonAn, GiaBan, HanSuDung, HinhAnh, newCongThuc) => {
-        const insertQuery = `INSERT INTO "MonAn" ("MaMonAn", "TenMonAn", "GiaBan", "HanSuDung", "HinhAnh") VALUES ($1, $2, $3, $4, $5) ON CONFLICT ("MaMonAn") DO NOTHING`;
-        const insertValues = [MaMonAn, TenMonAn, GiaBan, HanSuDung, HinhAnh];
+    themMonAn: async (MaMonAn, TenMonAn, GiaBan, HinhAnh, newCongThuc) => {
+        const insertQuery = `INSERT INTO "MonAn" ("MaMonAn", "TenMonAn", "GiaBan", "HanSuDung", "HinhAnh") VALUES ($1, $2, $3, CURRENT_DATE, $4) ON CONFLICT ("MaMonAn") DO NOTHING`;
+        const insertValues = [MaMonAn, TenMonAn, GiaBan, HinhAnh];
         await db.none(insertQuery, insertValues);
 
         if (MaMonAn[0] == 'C') {
@@ -440,4 +440,45 @@ module.exports = {
             dbcn.done();
         }
     },
+    layKhuyenMai: async () => {
+        let dbcn = null;
+        try {
+            dbcn = await db.connect();
+            const data = await dbcn.one(`SELECT * FROM "KhuyenMai"`);
+            return data;
+        } catch (error) {
+            throw error;
+        } finally {
+            dbcn.done();
+        }
+    },
+    capNhatKhuyenMai: async (MocKhuyenMai, GiaTriKhuyenMai, GioiHanKhuyenMai) => {
+        let dbcn = null;
+        try {
+            dbcn = await db.connect();
+            const updateQuery = `UPDATE "KhuyenMai" SET "MocKhuyenMai" = $1, "GiaTriKhuyenMai" = $2, "GioiHanKhuyenMai" = $3`;
+            const updateValues = [MocKhuyenMai, GiaTriKhuyenMai, GioiHanKhuyenMai];
+            await dbcn.none(updateQuery, updateValues);
+        } catch (error) {
+            throw error;
+        } finally {
+            dbcn.done();
+        }
+    },
+    capNhatGiamGia: async (MocKhuyenMai, GiaTriKhuyenMai, GioiHanKhuyenMai) => {
+        let dbcn = null;
+        try {
+            dbcn = await db.connect();
+            const updateQuery = `
+                UPDATE "KhachHang"
+                SET "GiamGia" = LEAST(FLOOR("TichLuy" / $1) * $2, $3)
+            `;
+            const updateValues = [MocKhuyenMai, GiaTriKhuyenMai, GioiHanKhuyenMai];
+            await dbcn.none(updateQuery, updateValues);
+        } catch (error) {
+            throw error;
+        } finally {
+            dbcn.done();
+        }
+    }
 }
